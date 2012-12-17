@@ -42,7 +42,7 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 public class AnimatedModel implements VisibleObject{
-
+	//Test
 	int currentFrame = 0;
 	transient DoubleBuffer vertexBuffer;
 	transient DoubleBuffer normalBuffer;
