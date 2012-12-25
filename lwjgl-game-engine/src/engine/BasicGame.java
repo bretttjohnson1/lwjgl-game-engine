@@ -39,9 +39,9 @@ public class BasicGame {
 	}
 	
 	
-	public static int genDispList(int range){
-		return GL11.glGenLists(range);
-	}
+//	public static int genDispList(int range){
+//		return GL11.glGenLists(range);
+//	}
 	
 	public void preInit(){}
 
@@ -52,6 +52,8 @@ public class BasicGame {
 	public void tick(){}
 	
 	public void nonPauseTick(){}
+	
+	public void physTick(){};
 	
 	public void setGravity(Vector3f gravity){
 		world.setGravity(gravity);

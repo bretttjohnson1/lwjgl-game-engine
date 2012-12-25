@@ -3,6 +3,7 @@ package survivalGame;
 import java.awt.Canvas;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.vecmath.Vector3f;
 
@@ -13,6 +14,9 @@ import survivalGame.object.HouseObject;
 import survivalGame.object.Object;
 import survivalGame.object.ObjectTerrain;
 import survivalGame.object.ObjectTest;
+import survivalGame.weapon.RangeWeapon;
+import survivalGame.weapon.WeaponAK47;
+import survivalGame.weapon.WeaponPistol;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
@@ -35,12 +39,13 @@ public class SurvivalGame extends BasicGame {
 	static GameManager gm;
 	Player player;
 	Level level;	
-	Weapon[] weapons = new Weapon[2];
+	RangeWeapon[] weapons = new RangeWeapon[2];
 	Object test = null;
 	HUD headsUpDisplay = null;
 //	EntitySpawnManager esm;
-	HUDString fps = new HUDString("FPS: What you paid for", 0, 0);
-	HUDString tps = new HUDString("spdjasdjsa;dja;djas;ldkas;ldksa;ldkas", 300, 0);
+	HUDString fps = new HUDString("FPS: 0", 0, 0);
+	HUDString tps = new HUDString("TPS: 0", 300, 0);
+	HUDString ptps = new HUDString("PTPS: 0", 600, 0);
 	public static void main(String[] args) {
 		gm = new GameManager();
 		gm.startGame(new SurvivalGame(640, 480, null), 100);
@@ -53,25 +58,27 @@ public class SurvivalGame extends BasicGame {
 	
 	@Override
 	public void preInit() {
-		world.setMenu(new MenuLoading(world).menu);
-		
+		world.setMenu(new MenuLoading(world).menu);		
 		level = new Level(world);
 		player = new Player(level, speed, runFactor, jumpForce);
 		setGravity(new Vector3f(0,-9.8f,0));
 		gm.grabMouse = true;
 		try {
-			VisibleObjectHandler.load(new File("SurvivalGame/Game_Resorces_Link.dat"),world);
-		} catch (FileNotFoundException e) {
+			VisibleObjectHandler.load("SurvivalGame/Models",world,false);
+		} catch (ClassNotFoundException | IOException e) {
+			System.err.println("There was an error reading the Model Files.");
 			e.printStackTrace();
-			System.exit(1);
+		}
+		try {
+			VisibleObjectHandler.load("SurvivalGame/AnimatedModels",world,true);
+		} catch (ClassNotFoundException | IOException e) {
+			System.err.println("There was an error reading the Animated Model Files.");
+			e.printStackTrace();
 		}		
 	}
 	
 	@Override
-	public void midInit() {
-		
-		
-	}
+	public void midInit() {}
 	
 	
 	@Override
@@ -96,6 +103,7 @@ public class SurvivalGame extends BasicGame {
 		headsUpDisplay = new HUD((float)Render.width/(float)Render.height);
 		headsUpDisplay.addElement(fps);
 		headsUpDisplay.addElement(tps);
+		headsUpDisplay.addElement(ptps);
 	//	world.setHUD(headsUpDisplay);
 //		level.addEntity(enityItemAK47);	
 	//	enityItemAK47.addedToLevel();
@@ -118,6 +126,7 @@ public class SurvivalGame extends BasicGame {
 		if(!Keyboard.isCreated()) return;
 		fps.changeString("FPS: " + render.fps);
 		tps.changeString("TPS: " + gm.tps);
+		ptps.changeString("PTPS: " + GameManager.ptps);
 		player.tick(camera);
 		level.tick();
 	//	light.setLocation(new Vector3f((float)-camera.x,(float)camera.y+10,(float)-camera.z));

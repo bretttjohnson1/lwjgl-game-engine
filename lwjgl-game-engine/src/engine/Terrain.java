@@ -339,25 +339,28 @@ public class Terrain{
 
 		float defp2 =Chunk.length/4;//size of the terrain
 		texPart = BufferUtils.createFloatBuffer(Chunk.length*Chunk.length*12);
+		float test = (float) (defp2*2/defp2);
 		for (int f=0;f<Chunk.length-1;f++){
 			for (int g=0;g<Chunk.length-1;g++){
-				texPart.put(startx*mag+(f*mag)/defp2);
-				texPart.put(startz*mag+(g*mag)/defp2);				
+				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
+				texPart.put((startz*mag+g*mag/defp2)*test);
+				
+				texPart.put((startx*mag+(f*mag)/defp2)*test);
+				texPart.put((startz*mag+(g*mag)/defp2)*test);	
 
-				texPart.put(startx*mag+(f+1)*mag/defp2);
-				texPart.put(startz*mag+g*mag/defp2);
+				texPart.put((startx*mag+f*mag/defp2)*test);
+				texPart.put((startz*mag+(g+1)*mag/defp2)*test);
 
-				texPart.put(startx*mag+f*mag/defp2);
-				texPart.put(startx*mag+f*mag/defp2);
+				
+				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
+				texPart.put((startz*mag+g*mag/defp2)*test);
+				
+				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
+				texPart.put((startz*mag+((g+1)*mag)/defp2)*test);
 
-				texPart.put(startx*mag+(f+1)*mag/defp2);
-				texPart.put(startz*mag+((g+1)*mag)/defp2);
+				texPart.put((startx*mag+f*mag/defp2)*test);
+				texPart.put((startz*mag+(g+1)*mag/defp2)*test);
 
-				texPart.put(startx*mag+(f+1)*mag/defp2);
-				texPart.put(startz*mag+g*mag/defp2);
-
-				texPart.put(startx*mag+f*mag/defp);
-				texPart.put(startz*mag+(g+1)*mag/defp);
 			}
 		}
 		texPart.rewind();

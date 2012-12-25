@@ -309,7 +309,7 @@ public class TerrainManager implements VisibleObject{
 		Terrain[] terrainRenders = new Terrain[9];
 		for(int aa=0;aa<numofchunks;aa++){
 			for(int b=0;b<numofchunks;b++){
-				Terrain t = new Terrain(aa*(int)defc,b*(int)defc,noise);
+				Terrain t = new Terrain(aa*(int)defc,b*(int)defc,noise);//,new int[]{100,0,0,0});
 				int[] adj=getAdjacentChunks(t);
 				float[]top=new float[defc];
 				if(adj[1]!=-1)top=Tera.get(adj[1]).nleft;
@@ -320,7 +320,7 @@ public class TerrainManager implements VisibleObject{
 				float[]bottom=new float[defc];
 				if(adj[3]!=-1)bottom=Tera.get(adj[3]).nright;
 				t.setSeed(top, left, right, bottom, true);
-				t.genTerrain((int)((Math.pow(2, def))+1),image,mag);
+				t.genTerrain(defc,image,mag);
 				Tera.add(t);
 				addTerrainToPhys(t);
 				t.id = count + "original";				

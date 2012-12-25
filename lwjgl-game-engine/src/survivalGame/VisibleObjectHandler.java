@@ -43,7 +43,7 @@ public class VisibleObjectHandler {
 		File f = new File(path);
 		File[] files = f.listFiles();
 		if(animatedModels){
-			for(int i=0;i<files.length;i++){
+			for(int i=0;i<files.length;i++){				
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
 				vObjs.add((AnimatedModel)ois.readObject());
 				ois.close();
@@ -82,10 +82,10 @@ public class VisibleObjectHandler {
 				File image = new File(path + ".bmp");
 				VisibleObject v = null;
 				if(anModel){
-				//	System.out.println("jashd");
+				
 					v = l.loadAnimatedModel(path,frames,ImageIO.read(image));
 				}else{
-				//	System.out.println("jashd2");
+				
 					v =l.loadOBJ(model, ImageIO.read(image));					
 				}
 				w.addObject(v);

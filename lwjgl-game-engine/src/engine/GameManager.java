@@ -28,6 +28,8 @@ public class GameManager implements Runnable {
 	Thread phys = new Thread();
 	public boolean grabMouse = false;
 	public Phys physClass;
+	public static int ptps = 0;
+	
 	
 	public void startGame(BasicGame game,int gameSpeed){
 		
@@ -115,12 +117,22 @@ public class GameManager implements Runnable {
 			if(world != null) world.tick();
 			
 			
-			if(!(phys.isAlive() && logic.isAlive() && game.rendert.isAlive())){
+			if(!(phys.isAlive() && game.rendert.isAlive())){
+				System.out.println("Thread phys is alive: " + phys.isAlive());
+				//System.out.println("Thread logic is alive: " + logic.isAlive());
+				System.out.println("Thread render is alive: " + game.rendert.isAlive());
 				cleanupAndEndGame();
 			}
 			
 			Start = System.currentTimeMillis();
+		//	System.out.println("tick");
 		}
+		while((phys.isAlive() || game.rendert.isAlive())){
+			System.out.println("Thread phys is alive: " + phys.isAlive());
+			//System.out.println("Thread logic is alive: " + logic.isAlive());
+			System.out.println("Thread render is alive: " + game.rendert.isAlive());
+		}
+		System.exit(0);
 	}
 	
 	public void cleanupAndEndGame(){		
@@ -133,7 +145,7 @@ public class GameManager implements Runnable {
 
 class Phys implements Runnable {
 	BasicGame game = null;
-	long start = 0, finish;
+	long start = 0, finish;	
 	ArrayList<RigidBody> needToBeAdded = new ArrayList<RigidBody>();
 	ArrayList<RigidBody> needToBeRemoved = new ArrayList<RigidBody>();
 	public Phys(BasicGame game){
@@ -143,9 +155,12 @@ class Phys implements Runnable {
 	public void run(){
 		//Timer tick = new Timer(1000/60,this);
 		//tick.start();
-		int ptps = 0;
+		
+		long startTime = System.currentTimeMillis();
+		long endTime = System.currentTimeMillis();
 		while(BasicGame.isRunning){
-			try{
+			try{				
+				game.physTick();
 				for(int i=0;i<needToBeAdded.size();i++){
 					game.world.physWorld.addRigidBody(needToBeAdded.get(i));
 					needToBeAdded.remove(i);				
@@ -162,7 +177,16 @@ class Phys implements Runnable {
 				start = System.currentTimeMillis();
 			}catch(Exception e){
 				e.printStackTrace();
-			}			
+			}
+			endTime = System.currentTimeMillis();
+			float diff = endTime - startTime;
+			if(diff == 0){ 
+				GameManager.ptps = -1;
+			}else{
+				GameManager.ptps = (int) (1000f/diff);
+			}
+			startTime = System.currentTimeMillis();
+			
 		}
 	}
 }

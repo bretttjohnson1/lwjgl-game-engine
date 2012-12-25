@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import survivalGame.entity.EntityLightFlashLight;
+import survivalGame.weapon.RangeWeapon;
 
 import com.bulletphysics.collision.shapes.CapsuleShape;
 
@@ -19,7 +20,7 @@ import engine.Utils;
 import engine.World;
 
 public class Player {
-	Weapon weapon;
+	RangeWeapon weapon;
 	MobControler mobControler;
 	Model wModel = null;
 	public Inventory inventory;
@@ -144,7 +145,7 @@ public class Player {
 		//System.out.println(mobControler.checkCollisionWithOtherObject());
 	}
 	
-	public void setWeapon(Weapon w){
+	public void setWeapon(RangeWeapon w){
 		if(weapon != null) world.removeVisibleHUDObject(weapon.weaponModel);
 		this.weapon = w;
 		wModel = w.weaponModel;
