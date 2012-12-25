@@ -8,6 +8,7 @@ import org.lwjgl.input.Mouse;
 
 import survivalGame.entity.EntityLightFlashLight;
 import survivalGame.weapon.RangeWeapon;
+import survivalGame.weapon.Weapon;
 
 import com.bulletphysics.collision.shapes.CapsuleShape;
 
@@ -20,7 +21,7 @@ import engine.Utils;
 import engine.World;
 
 public class Player {
-	RangeWeapon weapon;
+	Weapon weapon;
 	MobControler mobControler;
 	Model wModel = null;
 	public Inventory inventory;
@@ -78,7 +79,7 @@ public class Player {
 		if(Mouse.isButtonDown(0)) {
 			if(weapon != null) {
 				System.out.println(rotx);
-				weapon.shoot(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
+				weapon.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
 			}
 		}
 		
@@ -145,15 +146,16 @@ public class Player {
 		//System.out.println(mobControler.checkCollisionWithOtherObject());
 	}
 	
-	public void setWeapon(RangeWeapon w){
+	public void setWeapon(Weapon weapon2){
 		if(weapon != null) world.removeVisibleHUDObject(weapon.weaponModel);
-		this.weapon = w;
-		wModel = w.weaponModel;
+		this.weapon = weapon2;
+		wModel = weapon2.weaponModel;
 		world.addVisisbleHUDObject(wModel);
 		wModel.setVisable(true);
 		wModel.move(new Point3d(0.2f,-0.5f,0.1f));
 		wModel.rot(0, 0, 0);
-		weapon.creatRecoilAnimation();
+		if(weapon instanceof RangeWeapon)
+		((RangeWeapon) weapon).creatRecoilAnimation();
 	}
 	public Point3d getLocation(){
 		return mobControler.getLocation().duplicate();

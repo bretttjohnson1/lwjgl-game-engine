@@ -96,8 +96,8 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		name.setSize(120, 25);
 		window.add(name);
 		
-		checkBoxAnimatedModel.setLocation(670, 0);
-		checkBoxAnimatedModel.setSize(150, 75);
+		checkBoxAnimatedModel.setLocation(670, 27);
+		checkBoxAnimatedModel.setSize(150, 20);
 		window.add(checkBoxAnimatedModel);
 		
 		window.repaint();

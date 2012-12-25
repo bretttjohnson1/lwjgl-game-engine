@@ -20,35 +20,25 @@ import engine.Model;
 import engine.VisibleObject;
 import engine.World;
 
-public class RangeWeapon {
+public class RangeWeapon extends Weapon{
 	
-	public RangeWeapon(int weaponModelID, int WeaponItemId, Level level){
-		weaponModel = VisibleObjectHandler.getModel(weaponModelID);
-		this.WeaponItemID = weaponModelID;
-		this.level = level;
+	public RangeWeapon(Model model, Level level){
+		super(model,level);
 	}
 	
-	public int WeaponItemID;
-	public int id;	
-	public Model weaponModel;
+	
 	public int clipSize;	
 	public EntityProjectile projectile;
 	AnimationSet reCoil;
 	AnimationPlayer ap;
 	int animationID;
-	Level level;
 	//EntitySpawnManager esm;
 	
-	public void shoot(Vector3f dir, Vector3f location, Vector3f rot){
-		ap.playAnimation(id, 100,false);
-	//	EntityProjectileBullet epb = new EntityProjectileBullet(level);
-	//	epb.spawn(dir, location, rot);
+	public void use(Vector3f dir, Vector3f location, Vector3f rot){
+		ap.playAnimation(animationID, 100,false);	
 		dir.scale(3000);
 		dir.add(location);
-		CollisionObject co = level.renderWorld.rayTest(location, dir);
-	//	System.out.println(co);
-	//	Line l = new Line(location, dir);
-	//	level.renderWorld.addObject(l);
+		CollisionObject co = level.renderWorld.rayTest(location, dir);	
 	}
 	
 	public void creatRecoilAnimation(){

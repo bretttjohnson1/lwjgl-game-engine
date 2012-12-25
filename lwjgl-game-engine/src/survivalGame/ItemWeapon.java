@@ -1,17 +1,14 @@
 package survivalGame;
 
-import java.awt.image.BufferedImage;
+import survivalGame.weapon.Weapon;
 
-import survivalGame.weapon.RangeWeapon;
-
-import engine.Model;
 
 public class ItemWeapon extends Item{
 
-	public ItemWeapon(RangeWeapon w,int weight) {
-		super(w.WeaponItemID,w.weaponModel.image,w.weaponModel, weight);
+	public ItemWeapon(Weapon w,int weight) {
+		super(w.image,w.weaponModel, weight);
 		weapon = w;
 	}
-	RangeWeapon weapon;
+	Weapon weapon;
 	
 }

@@ -31,7 +31,7 @@ public class VisibleObjectHandler {
 		return m.duplicate();
 	}
 	
-	public static VisibleObject getModelId(String name){
+	public static VisibleObject getModel(String name){
 		for(VisibleObject vo : vObjs){
 			if( vo.getName().equals(name)){
 				return vo;
@@ -45,13 +45,17 @@ public class VisibleObjectHandler {
 		if(animatedModels){
 			for(int i=0;i<files.length;i++){				
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
-				vObjs.add((AnimatedModel)ois.readObject());
+				AnimatedModel am = (AnimatedModel)ois.readObject();
+				am.name = files[i].getName();
+				vObjs.add(am);				
 				ois.close();
 			}
 		}else{
 			for(int i=0;i<files.length;i++){
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
-				vObjs.add((Model)ois.readObject());
+				Model m = (Model)ois.readObject();
+				m.name = files[i].getName();
+				vObjs.add(m);				
 				ois.close();
 			}
 		}
@@ -105,7 +109,7 @@ public class VisibleObjectHandler {
 		}		
 	}
 	
-	//Finals for the different VisibleObjects
+//----------Finals for the different VisibleObjects NOT USED ANYMORE!!!------------------
 	
 	//Entities
 	public static final int Zombie = 0;

@@ -72,6 +72,7 @@ public class Model implements VisibleObject, Serializable{
 	int height;
 	transient boolean readyToWrite = false;
 	public String name = null;
+	public boolean lighting = true;
 
 	public void setVisable(boolean visable){
 		this.visable = visable;
@@ -307,7 +308,11 @@ public class Model implements VisibleObject, Serializable{
 			builtTexture = true;
 			loadTexture();
 		}
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);	
+		if(lighting){
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		}else{
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+		}
 		if(built == false){
 			if(textureBuffer == null){
 				if(vertexBufferID < 1) vertexBufferID = ARBVertexBufferObject.glGenBuffersARB();

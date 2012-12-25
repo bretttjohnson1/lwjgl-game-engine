@@ -85,36 +85,20 @@ public class SurvivalGame extends BasicGame {
 	public void postInit() {
 		ObjectTerrain terrain = new ObjectTerrain(player, new File("res/dirt.bmp"),new File("res/dirt.bmp"));
 		level.addObject(terrain);		
-		terrain.addToPhys();
-		HouseObject house = new HouseObject();
-		house.setLocation(new Vector3f(0,-10,0));
-		level.addObject(house);
-	//	house.addToPhys(0)
-		house.addToPhys();
-		test = new ObjectTest();
-		test.setLocation(new Vector3f(0,0,0));
-		weapons[0] = new WeaponAK47(1,level);
-		ItemWeapon itemAK47 = new ItemWeapon(weapons[0],0);
-		itemAK47.name = "AK47";
-		weapons[1] = new WeaponPistol(0,level);
-		ItemWeapon itemPistol = new ItemWeapon(weapons[1],0);
-		itemPistol.name = "Pistol";
-		EntityItem enityItemAK47 = new EntityItem(level, itemAK47);
+		terrain.addToPhys();		
 		headsUpDisplay = new HUD((float)Render.width/(float)Render.height);
 		headsUpDisplay.addElement(fps);
 		headsUpDisplay.addElement(tps);
 		headsUpDisplay.addElement(ptps);
-	//	world.setHUD(headsUpDisplay);
-//		level.addEntity(enityItemAK47);	
-	//	enityItemAK47.addedToLevel();
-	//	EntityItem enityItemPistol = new EntityItem(level, itemPistol);
-	//	level.addEntity(enityItemPistol);
-	//	enityItemPistol.rendarbleObject.move(new Point3d(10,0,10));
-	//	enityItemPistol.addedToLevel();
+		WeaponAK47 ak47 = new WeaponAK47(level);
+		WeaponPistol pistol = new WeaponPistol(level);
+		ItemWeapon itemAK47 = new ItemWeapon(ak47, 0);
+		ItemWeapon itemPistol = new ItemWeapon(pistol, 0);
+		
 		player.inventory.addItem(new InventoryItem(1, itemAK47));
 		player.inventory.addItem(new InventoryItem(1, itemPistol));
-		player.setLocation(new Point3d(20,100,20));
-	//	player.setWeapon(new WeaponMannlicher(0, level));
+		
+		player.setLocation(new Point3d(20,100,20));	
 		world.setMenu(null);		
 		
 	}
