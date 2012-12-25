@@ -130,4 +130,9 @@ public class FTree implements VisibleObject{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getName() {
+		return null;
+	}
 }

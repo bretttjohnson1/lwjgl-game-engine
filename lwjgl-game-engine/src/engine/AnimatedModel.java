@@ -67,6 +67,7 @@ public class AnimatedModel implements VisibleObject{
 	int width, height;
 	int[] textureData;
 	transient boolean readyToWrite = false;
+	public String name = null;
 	
 	public AnimatedModel(){
 		
@@ -392,6 +393,11 @@ public class AnimatedModel implements VisibleObject{
 	@Override
 	public void removedFromWorld() {
 		if(rigidBody != null) world.physWorld.removeRigidBody(rigidBody);
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }

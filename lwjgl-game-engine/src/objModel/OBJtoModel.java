@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.input.Keyboard;
@@ -42,15 +43,17 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 	File image,obj,out;
 	JButton openImage,openOBJ,save,convert;
 	JFileChooser jfc = new JFileChooser();
+	JTextField numFrames = new JTextField();
+	JTextField name = new JTextField("Enter Name Here");
 	Light light = new Light(0, 10, 0, 1);
 	JCheckBox checkBoxAnimatedModel = new JCheckBox("Animated Model");
 	
 	public OBJtoModel(){
-		super(640,480,c);
+		super(640,480,c);		
 		window.setSize((int)(640*1.5f),480);
 		window.setLayout(null);
 		window.setVisible(true);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(c);
 		c.setVisible(true);
 		c.setSize(640, 480);
@@ -85,8 +88,16 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		convert.setEnabled(false);
 		window.add(convert);
 		
+		numFrames.setLocation(850, 20);
+		numFrames.setSize(30, 25);
+		window.add(numFrames);
+		
+		name.setLocation(800, 48);
+		name.setSize(120, 25);
+		window.add(name);
+		
 		checkBoxAnimatedModel.setLocation(670, 0);
-		checkBoxAnimatedModel.setSize(200, 75);
+		checkBoxAnimatedModel.setSize(150, 75);
 		window.add(checkBoxAnimatedModel);
 		
 		window.repaint();
@@ -124,20 +135,23 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 			OBJLoader ol = new OBJLoader();
 			Model l = null;
 			AnimatedModel am = null;
-			try {
-				
+			try {			
 				
 				if(checkBoxAnimatedModel.getAccessibleContext().getAccessibleValue().getCurrentAccessibleValue().intValue() == 1){
-					
+					String fileName = obj.getAbsolutePath().substring(0,obj.getAbsolutePath().length()-11);
+					am = ol.loadAnimatedModel(fileName, Integer.parseInt(numFrames.getText()));
 				}else{
 					l =	ol.loadOBJ(obj,ImageIO.read(image));
 				}
 				
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				System.err.println("ERROR: Model could not be loaded!");
+				System.err.println("Exiting...");
+				gm.cleanupAndEndGame();
 			}
 			
-			world.addObject(l);		
+			world.addObject(l);	
 			ObjectOutputStream oos = null;
 			while(l.readyToWrite()){}
 			try {
@@ -148,9 +162,17 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 				e1.printStackTrace();
 			}
 			try {
-				oos.writeObject(l);
+				if(am != null){
+					am.name = name.getText();
+					oos.writeObject(am);
+				}else{
+					l.name = name.getText();
+					oos.writeObject(l);
+				}				
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				System.err.println("ERROR: Model could not be saved!");
+				System.err.println("Exiting...");
 			}				
 			l.setVisible(true);
 			l.move(new Point3d(0,0,-5));
@@ -180,6 +202,6 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
 			camera.x -= 0.5;
 		}
-		
+		if(!window.isVisible()) gm.cleanupAndEndGame();
 	}
 }

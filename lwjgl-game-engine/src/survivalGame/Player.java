@@ -6,6 +6,8 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import survivalGame.entity.EntityLightFlashLight;
+
 import com.bulletphysics.collision.shapes.CapsuleShape;
 
 import engine.Camera;

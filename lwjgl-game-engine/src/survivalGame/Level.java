@@ -6,6 +6,12 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
+import survivalGame.entity.Entity;
+import survivalGame.entity.EntityLight;
+import survivalGame.entity.EntityLightSun;
+import survivalGame.entity.EntitySpawnManager;
+import survivalGame.object.Object;
+
 import engine.Color3f;
 import engine.World;
 import engine.menu.Menu;
@@ -15,24 +21,24 @@ public class Level {
 	ArrayList<Entity> entitys = new ArrayList<Entity>();
 	ArrayList<Object> objects = new ArrayList<Object>();
 	EntityLightSun sun = new EntityLightSun(this);
-	World renderWorld;
-	EntitySpawnManager esm;
+	public World renderWorld;
+	public EntitySpawnManager esm;
 	float time = 1;
 	boolean night = false;
 	BaseMenu menu = null;
 	
 	public Level(World world){
 		renderWorld = world;
-		world.addLight(sun.l);	
+		world.addLight(sun.light);	
 		sun.setLocation(new Vector3f(0,1000,0));
-		sun.l.setAmbient(new Vector4f(1,1,1,1));
+		sun.light.setAmbient(new Vector4f(1,1,1,1));
 		esm = new EntitySpawnManager(this);
 	}
 	
 	public void addEntity(Entity e){
 		entitys.add(e);
 		if(e instanceof EntityLight){
-			renderWorld.addLight(((EntityLight)e).l);
+			renderWorld.addLight(((EntityLight)e).light);
 			return;
 		}
 		renderWorld.addObject(e.getVisableObject());
@@ -42,7 +48,7 @@ public class Level {
 	public void removeEntity(Entity e){
 		entitys.remove(e);
 		if(e instanceof EntityLight){
-			renderWorld.removeLight(((EntityLight)e).l);
+			renderWorld.removeLight(((EntityLight)e).light);
 			return;
 		}
 		renderWorld.removeObject(e.getVisableObject());

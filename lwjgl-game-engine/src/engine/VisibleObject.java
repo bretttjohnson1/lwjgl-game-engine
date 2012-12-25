@@ -16,4 +16,5 @@ public interface VisibleObject {
 	public void addToPhysWorld(float mass);	
 	public void addToPhysWorld(CollisionShape cs,float mass);
 	public void removeFromPhysWorld();
+	public String getName();
 }

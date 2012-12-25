@@ -7,7 +7,7 @@ import engine.Model;
 public class Item {
 	
 	Item[] items = new Item[255];
-	Model model;
+	public Model model;
 	BufferedImage image;
 	public String name = "";
 	int weight;

@@ -557,4 +557,9 @@ public class TerrainManager implements VisibleObject{
 	public void removeFromPhysWorld() {
 		phys = false;	
 	}
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -5,6 +5,8 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.Sys;
 
+import survivalGame.entity.EntityProjectile;
+
 import com.bulletphysics.collision.dispatch.CollisionObject;
 
 import engine.AnimatedModel;

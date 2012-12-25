@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,6 +31,31 @@ public class VisibleObjectHandler {
 		return m.duplicate();
 	}
 	
+	public static VisibleObject getModelId(String name){
+		for(VisibleObject vo : vObjs){
+			if( vo.getName().equals(name)){
+				return vo;
+			}
+		}
+		return null;
+	}
+	public static void load(String path, World w, boolean animatedModels) throws FileNotFoundException, IOException, ClassNotFoundException{
+		File f = new File(path);
+		File[] files = f.listFiles();
+		if(animatedModels){
+			for(int i=0;i<files.length;i++){
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
+				vObjs.add((AnimatedModel)ois.readObject());
+				ois.close();
+			}
+		}else{
+			for(int i=0;i<files.length;i++){
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
+				vObjs.add((Model)ois.readObject());
+				ois.close();
+			}
+		}
+	}
 	public static void load(File dataSheet,World w) throws FileNotFoundException{
 		//6
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(dataSheet));

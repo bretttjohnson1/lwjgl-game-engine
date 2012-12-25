@@ -71,6 +71,7 @@ public class Model implements VisibleObject, Serializable{
 	int width;
 	int height;
 	transient boolean readyToWrite = false;
+	public String name = null;
 
 	public void setVisable(boolean visable){
 		this.visable = visable;
@@ -562,6 +563,10 @@ public class Model implements VisibleObject, Serializable{
 	@Override
 	public void removedFromWorld() {
 		if(rb != null) world.physWorld.removeRigidBody(rb);
+	}
+	@Override
+	public String getName() {
+		return name;		
 	}	
 
 }

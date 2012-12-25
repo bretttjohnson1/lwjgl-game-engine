@@ -8,6 +8,12 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
 
+import survivalGame.entity.EntityItem;
+import survivalGame.object.HouseObject;
+import survivalGame.object.Object;
+import survivalGame.object.ObjectTerrain;
+import survivalGame.object.ObjectTest;
+
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 

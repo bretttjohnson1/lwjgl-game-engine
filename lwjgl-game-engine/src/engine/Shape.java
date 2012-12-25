@@ -355,5 +355,11 @@ public class Shape implements VisibleObject,Serializable {
 		
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

@@ -77,4 +77,10 @@ public class Line implements VisibleObject {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getName() {
+		return null;
+		
+	}
 }

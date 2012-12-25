@@ -91,6 +91,12 @@ public class LineShape implements VisibleObject{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }
