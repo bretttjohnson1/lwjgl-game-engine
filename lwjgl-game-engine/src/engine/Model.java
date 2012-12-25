@@ -50,10 +50,10 @@ public class Model implements VisibleObject, Serializable{
 	public ArrayList<Point3d> normals = new ArrayList<Point3d>();
 	public ArrayList<Face> faces = new ArrayList<Face>();
 	boolean visable = true;
-	public int vertexBufferID = 0;
-	public int normalBufferID = 0;
-	public int textureCoordBufferID = 0;
-	public int texID = 0;
+	transient public int vertexBufferID = 0;
+	transient public int normalBufferID = 0;
+	transient public int textureCoordBufferID = 0;
+	transient public int texID = 0;
 	transient IntBuffer textureBuffer = null;
 	public transient RigidBody rb = null;
 	transient public CollisionShape collisonShape;
@@ -103,6 +103,7 @@ public class Model implements VisibleObject, Serializable{
 		for(int i=0;i<textureBuffer.capacity();i++){
 			imageData[i] = textureBuffer.get(i);
 		}
+		System.out.println("imageReady");
 		readyToWrite = true;
 	}
 	public void removeFromPhysWorld(){

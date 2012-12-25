@@ -47,7 +47,9 @@ public class VisibleObjectHandler {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
 				AnimatedModel am = (AnimatedModel)ois.readObject();
 				am.name = files[i].getName();
-				vObjs.add(am);				
+				vObjs.add(am);	
+				am.lodedFromFile();
+				am.setVisible(false);
 				ois.close();
 			}
 		}else{
@@ -55,7 +57,10 @@ public class VisibleObjectHandler {
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
 				Model m = (Model)ois.readObject();
 				m.name = files[i].getName();
-				vObjs.add(m);				
+				vObjs.add(m);	
+				System.out.println(m.name);
+				m.loadedFromFile();
+				m.setVisable(false);
 				ois.close();
 			}
 		}

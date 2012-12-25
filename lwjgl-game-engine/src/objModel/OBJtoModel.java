@@ -153,7 +153,14 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 			
 			world.addObject(l);	
 			ObjectOutputStream oos = null;
-			while(l.readyToWrite()){}
+			while(!l.readyToWrite()){
+				System.out.println("Wating...");
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 			try {
 				oos = new ObjectOutputStream(new FileOutputStream(out));
 			} catch (FileNotFoundException e1) {
