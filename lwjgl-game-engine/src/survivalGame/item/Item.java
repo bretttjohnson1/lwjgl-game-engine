@@ -1,4 +1,4 @@
-package survivalGame;
+package survivalGame.item;
 
 import java.awt.image.BufferedImage;
 
@@ -10,7 +10,7 @@ public class Item {
 	public Model model;
 	BufferedImage image;
 	public String name = "";
-	int weight;
+	public int weight;
 	
 	public Item(BufferedImage image, Model model,int weight){
 		

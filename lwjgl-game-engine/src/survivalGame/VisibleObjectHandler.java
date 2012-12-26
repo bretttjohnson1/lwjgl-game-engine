@@ -90,11 +90,9 @@ public class VisibleObjectHandler {
 				File model = new File(path + ".obj");
 				File image = new File(path + ".bmp");
 				VisibleObject v = null;
-				if(anModel){
-				
+				if(anModel){				
 					v = l.loadAnimatedModel(path,frames,ImageIO.read(image));
-				}else{
-				
+				}else{				
 					v =l.loadOBJ(model, ImageIO.read(image));					
 				}
 				w.addObject(v);

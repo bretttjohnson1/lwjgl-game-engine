@@ -33,9 +33,10 @@ public class Player {
 	float jumpForce;
 	public int maxWeight = 1000;
 	EntityLightFlashLight flashLight;
+	Camera camera;
 	
 	
-	public Player(Level level, double speed, double runFactor, float jumpForce){
+	public Player(Level level, double speed, double runFactor, float jumpForce,Camera camera){
 		world = level.renderWorld;
 		this.level = level;
 		oSpeed = speed;
@@ -47,6 +48,7 @@ public class Player {
 		inventory = new Inventory(maxWeight);
 		flashLight = new EntityLightFlashLight(level);		
 		level.addEntity(flashLight);
+		this.camera = camera;
 	}
 	
 	float roty;
@@ -55,7 +57,7 @@ public class Player {
 	//float protx;
 	//float proty;
 	
-	public void tick(Camera camera){
+	public void tick(){
 		//proty = (float) camera.roty;
 		//protx = (float) camera.rotx;
 		camera.rotx -= ((double) Mouse.getDY())/4;
@@ -75,13 +77,6 @@ public class Player {
 		flashLight.setDirection(dir);
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) speed *=runFactor;
-		
-		if(Mouse.isButtonDown(0)) {
-			if(weapon != null) {
-				System.out.println(rotx);
-				weapon.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
-			}
-		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
 			mobControler.jump(jumpForce);
@@ -144,6 +139,15 @@ public class Player {
 		camera.y = mLoc.y-1;
 		camera.z = mLoc.z;
 		//System.out.println(mobControler.checkCollisionWithOtherObject());
+	}
+	
+	public void physTick(){
+		if(Mouse.isButtonDown(0)) {
+			if(weapon != null) {
+				System.out.println(rotx);
+				weapon.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
+			}
+		}
 	}
 	
 	public void setWeapon(Weapon weapon2){

@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL41;
 
 import survivalGame.VisibleObjectHandler;
 
@@ -143,7 +144,7 @@ public class World {
 	}
 	
 	public void render(){	
-		
+		GL11.glPushMatrix();
 		
 		if(renderTickNumber < 100);
 			renderTickNumber++;
@@ -165,19 +166,7 @@ public class World {
 			}
 		}
 		
-		if(hud !=null && currentMenu == null){
-			hud.render();
-		}
-		if(currentMenu != null){
-			currentMenu.render();
-		}
 		
-		for(int i=0;i<visibleHUDObject.size();i++){
-			VisibleObject v = visibleHUDObject.get(i);
-			if(v.getVisible()){
-				v.render();
-			}
-		}
 		
 		
 		GL11.glRotated(camera.rotx, 1,0, 0);		
@@ -196,8 +185,26 @@ public class World {
 			}
 		}
 		//physWorld.debugDrawWorld();
+		GL11.glPopMatrix();
 		
 		
+		
+		
+		for(int i=0;i<visibleHUDObject.size();i++){
+			VisibleObject v = visibleHUDObject.get(i);
+			if(v.getVisible()){
+				v.render();
+			}
+		}
+		GL11.glDisable(GL_DEPTH_TEST);
+		if(hud !=null && currentMenu == null){
+			hud.render();
+		}
+		
+		if(currentMenu != null){
+			currentMenu.render();
+		}
+		GL11.glEnable(GL_DEPTH_TEST);
 	}
 	public void cleanUp() {
 		

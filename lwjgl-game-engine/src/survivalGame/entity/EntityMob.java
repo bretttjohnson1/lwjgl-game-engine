@@ -1,17 +1,20 @@
 package survivalGame.entity;
 
 import survivalGame.Level;
+import survivalGame.MobAI;
 import engine.MobControler;
 import engine.Point3d;
 import engine.VisibleObject;
 
 public class EntityMob extends Entity {
 
-	public EntityMob(int vID, Level level) {
+	public EntityMob(int vID, Level level,MobAI mobAI) {
 		super(vID, level);
+		this.mobAI = mobAI;
 	}
 	
-	public MobControler controler;
+	MobControler controler;
+	MobAI mobAI;
 	int health;
 	int maxHealth;
 	

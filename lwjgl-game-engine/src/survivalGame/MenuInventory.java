@@ -17,6 +17,9 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
+import survivalGame.item.Item;
+import survivalGame.item.ItemWeapon;
+
 import engine.Point2d;
 import engine.World;
 import engine.menu.Menu;

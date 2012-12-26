@@ -1,6 +1,7 @@
 package survivalGame.entity;
 
 import survivalGame.Level;
+import survivalGame.MobAIZombie;
 import survivalGame.VisibleObjectHandler;
 
 import com.bulletphysics.collision.shapes.CapsuleShape;
@@ -11,7 +12,7 @@ import engine.VisibleObject;
 public class EntityMobZombie extends EntityMob{
 	
 	public EntityMobZombie(Level level) {
-		super(VisibleObjectHandler.Zombie, level);
+		super(VisibleObjectHandler.Zombie, level,new MobAIZombie());
 		controler = new MobControler(new CapsuleShape(1, 1.5f), level.renderWorld, 1f);
 	}
 	

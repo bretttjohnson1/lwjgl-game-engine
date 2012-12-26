@@ -1,5 +1,7 @@
 package survivalGame;
 
+import survivalGame.item.Item;
+
 public class InventoryItem {
 
 	int quantity;

@@ -99,12 +99,13 @@ public class Model implements VisibleObject, Serializable{
 	public void imageToArray(){
 		width = image.getWidth();
 		height = image.getHeight();
-		imageData = new int[textureBuffer.capacity()];
+		imageData = new int[textureBuffer.capacity()];		
 		for(int i=0;i<textureBuffer.capacity();i++){
 			imageData[i] = textureBuffer.get(i);
 		}
 		System.out.println("imageReady");
 		readyToWrite = true;
+		
 	}
 	public void removeFromPhysWorld(){
 		world.phys.needToBeRemoved.add(rb);
@@ -248,8 +249,9 @@ public class Model implements VisibleObject, Serializable{
 		rot.z =(float) newRZ;
 	}
 
-	void loadTexture(){		
-		if(textureBuffer != null){
+	void loadTexture(){
+		
+		if(textureBuffer != null){			
 			texID = GL11.glGenTextures();		
 			glBindTexture(GL_TEXTURE_2D, texID);
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);		
@@ -263,6 +265,7 @@ public class Model implements VisibleObject, Serializable{
 			System.out.println("things");
 			return;
 		}
+		
 		int il = image.getWidth()*image.getHeight();		
 		//	Graphics2D g = image.createGraphics();
 		//	g.rotate(Math.toRadians(180), image.getHeight()/2, image.getWidth()/2);
@@ -306,7 +309,7 @@ public class Model implements VisibleObject, Serializable{
 	@Override
 	public void render() {
 		if(!builtTexture){
-			builtTexture = true;
+			builtTexture = true;			
 			loadTexture();
 		}
 		if(lighting){

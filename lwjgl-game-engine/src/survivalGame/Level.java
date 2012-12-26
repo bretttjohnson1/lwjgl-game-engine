@@ -73,23 +73,36 @@ public class Level {
 		}
 		
 	}
-	
+	final int day = 144000; //ticks  
+	final int second = 100; //ticks
+	int elapsed = 0;
+	int currentTime = day/4;	
 	public void tick(){
+		if(elapsed>=100){ 
+			elapsed = 0;
+			if(night && currentTime >= day/2){ 
+				night = false;
+			}else if(!night && currentTime <= 0){
+				night = true;
+			}
+			time = (float) currentTime/((float)day/2f);
+		}
+		elapsed++;
+		
 		if(esm != null){
 			esm.tick();
 		}
-		
-		if(time <= 0.1f && !night){ 
-			night = true;
-		}else if(night && time >= 1){
-			night = false;
-		}
-		if(night) time += 0.001f;
-		else      time -= 0.001f;
+	//	System.out.println(time);
+	//	System.out.println(currentTime);
+		if(night) currentTime += 1;
+		else      currentTime -= 1;
 		sun.setTime(time);
 		renderWorld.render.setClearColor(new Color3f(time/2, time/2, time));
 		for(int i=0;i<objects.size();i++){
 			objects.get(i).tick();
+		}
+		for(int i=0;i<entitys.size();i++){
+			entitys.get(i).tick();
 		}
 		
 	}

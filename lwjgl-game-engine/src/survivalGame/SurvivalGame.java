@@ -10,6 +10,7 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.input.Keyboard;
 
 import survivalGame.entity.EntityItem;
+import survivalGame.item.ItemWeapon;
 import survivalGame.object.HouseObject;
 import survivalGame.object.Object;
 import survivalGame.object.ObjectTerrain;
@@ -60,7 +61,7 @@ public class SurvivalGame extends BasicGame {
 	public void preInit() {
 		world.setMenu(new MenuLoading(world).menu);		
 		level = new Level(world);
-		player = new Player(level, speed, runFactor, jumpForce);
+		player = new Player(level, speed, runFactor, jumpForce,camera);
 		setGravity(new Vector3f(0,-9.8f,0));
 		gm.grabMouse = true;
 		try {
@@ -111,7 +112,7 @@ public class SurvivalGame extends BasicGame {
 		fps.changeString("FPS: " + render.fps);
 		tps.changeString("TPS: " + gm.tps);
 		ptps.changeString("PTPS: " + GameManager.ptps);
-		player.tick(camera);
+		player.tick();
 		level.tick();
 	//	light.setLocation(new Vector3f((float)-camera.x,(float)camera.y+10,(float)-camera.z));
 	//	test.setLocation(new Vector3f((float)-camera.x, (float)(-camera.y) - 2, (float)-camera.z));
@@ -166,5 +167,9 @@ public class SurvivalGame extends BasicGame {
 			ePressed = false;
 		}
 		
+	}
+	@Override
+	public void physTick() {
+		player.physTick();
 	}
 }

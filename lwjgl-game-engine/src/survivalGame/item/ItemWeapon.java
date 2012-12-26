@@ -1,4 +1,4 @@
-package survivalGame;
+package survivalGame.item;
 
 import survivalGame.weapon.Weapon;
 
@@ -9,6 +9,6 @@ public class ItemWeapon extends Item{
 		super(w.image,w.weaponModel, weight);
 		weapon = w;
 	}
-	Weapon weapon;
+	public Weapon weapon;
 	
 }

@@ -2,8 +2,8 @@ package survivalGame.entity;
 
 import javax.vecmath.Vector3f;
 
-import survivalGame.Item;
 import survivalGame.Level;
+import survivalGame.item.Item;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 
