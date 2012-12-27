@@ -26,6 +26,7 @@ public class Level {
 	float time = 1;
 	boolean night = false;
 	BaseMenu menu = null;
+	Player player;
 	
 	public Level(World world){
 		renderWorld = world;
@@ -43,10 +44,12 @@ public class Level {
 		}
 		renderWorld.addObject(e.getVisableObject());
 		e.getVisableObject().setVisible(true);
+		System.out.println("skldhjaslkdjsalkdjasolkdjs");
 	} 
 	
 	public void removeEntity(Entity e){
 		entitys.remove(e);
+		e.getVisableObject().removeFromPhysWorld();
 		if(e instanceof EntityLight){
 			renderWorld.removeLight(((EntityLight)e).light);
 			return;
@@ -72,6 +75,9 @@ public class Level {
 			renderWorld.setMenu(null);
 		}
 		
+	}
+	public void setPlayer(Player player){
+		this.player = player;
 	}
 	final int day = 144000; //ticks  
 	final int second = 100; //ticks

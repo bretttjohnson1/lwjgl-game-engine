@@ -12,8 +12,7 @@ import engine.Model;
 public class EntityItem extends Entity{
 	
 	public EntityItem(Level level, Item item) {
-		super(0, level);
-		this.rendarbleObject = item.model.duplicate();
+		super(item.model.duplicate(), level);		
 	}
 
 	Item item;

@@ -131,6 +131,11 @@ public class GameManager implements Runnable {
 			System.out.println("Thread phys is alive: " + phys.isAlive());
 			//System.out.println("Thread logic is alive: " + logic.isAlive());
 			System.out.println("Thread render is alive: " + game.rendert.isAlive());
+			try{
+				Thread.sleep(100);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		System.exit(0);
 	}
@@ -146,8 +151,8 @@ public class GameManager implements Runnable {
 class Phys implements Runnable {
 	BasicGame game = null;
 	long start = 0, finish;	
-	ArrayList<RigidBody> needToBeAdded = new ArrayList<RigidBody>();
-	ArrayList<RigidBody> needToBeRemoved = new ArrayList<RigidBody>();
+	public ArrayList<RigidBody> needToBeAdded = new ArrayList<RigidBody>();
+	public ArrayList<RigidBody> needToBeRemoved = new ArrayList<RigidBody>();
 	public Phys(BasicGame game){
 		this.game = game;
 	}

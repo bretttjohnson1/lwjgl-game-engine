@@ -15,7 +15,7 @@ import survivalGame.object.HouseObject;
 import survivalGame.object.Object;
 import survivalGame.object.ObjectTerrain;
 import survivalGame.object.ObjectTest;
-import survivalGame.weapon.RangeWeapon;
+import survivalGame.weapon.WeaponRange;
 import survivalGame.weapon.WeaponAK47;
 import survivalGame.weapon.WeaponPistol;
 
@@ -40,7 +40,7 @@ public class SurvivalGame extends BasicGame {
 	static GameManager gm;
 	Player player;
 	Level level;	
-	RangeWeapon[] weapons = new RangeWeapon[2];
+	WeaponRange[] weapons = new WeaponRange[2];
 	Object test = null;
 	HUD headsUpDisplay = null;
 //	EntitySpawnManager esm;
@@ -91,6 +91,7 @@ public class SurvivalGame extends BasicGame {
 		headsUpDisplay.addElement(fps);
 		headsUpDisplay.addElement(tps);
 		headsUpDisplay.addElement(ptps);
+		world.setHUD(headsUpDisplay);
 		WeaponAK47 ak47 = new WeaponAK47(level);
 		WeaponPistol pistol = new WeaponPistol(level);
 		ItemWeapon itemAK47 = new ItemWeapon(ak47, 0);

@@ -41,6 +41,7 @@ public class MobControler implements ActionListener {
 	DynamicsWorld collWorld;
 	Timer t = new Timer(500, this);
 	Vector3f velocity = new Vector3f(0,0,0);
+	Vector3f rot = new Vector3f();
 	GhostObject go = null;
 	
 	public MobControler(ConvexShape mobShape, World world, float mass){
@@ -121,6 +122,13 @@ public class MobControler implements ActionListener {
 		rigidBody.getLinearVelocity(vOut);
 	}
 	
+	public void setRot(Vector3f rot){
+		this.rot = rot;
+	}
+	
+	public Vector3f getRot(){
+		return rot;
+	}
 	public boolean checkCollisionWithOtherObject(){
 		int numManifolds = collWorld.getDispatcher().getNumManifolds();
 		for(int i=0;i<numManifolds;i++){

@@ -6,9 +6,8 @@ import engine.VisibleObject;
 
 public class EntityAnimated extends Entity{
 
-	public EntityAnimated(int visibleObjectID, Level level) {
-		super(-1, level);
-		rendarbleObject = VisibleObjectHandler.getAnimatedModel(visibleObjectID);
+	public EntityAnimated(VisibleObject vo, Level level) {
+		super(vo, level);		
 	}
 	
 

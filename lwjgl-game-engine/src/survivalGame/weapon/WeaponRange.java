@@ -8,6 +8,7 @@ import org.lwjgl.Sys;
 import survivalGame.Level;
 import survivalGame.VisibleObjectHandler;
 import survivalGame.entity.EntityProjectile;
+import survivalGame.entity.EntityProjectileBullet;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 
@@ -20,10 +21,11 @@ import engine.Model;
 import engine.VisibleObject;
 import engine.World;
 
-public class RangeWeapon extends Weapon{
+public class WeaponRange extends Weapon{
 	
-	public RangeWeapon(Model model, Level level){
+	public WeaponRange(Model model, Level level){
 		super(model,level);
+		
 	}
 	
 	
@@ -32,13 +34,19 @@ public class RangeWeapon extends Weapon{
 	AnimationSet reCoil;
 	AnimationPlayer ap;
 	int animationID;
+	int ticksPerFire = 10;
+	int deltaTicks = 0;
 	//EntitySpawnManager esm;
 	
 	public void use(Vector3f dir, Vector3f location, Vector3f rot){
+		if(!(deltaTicks>=ticksPerFire)) return;
+		projectile = new EntityProjectileBullet(level);
+		deltaTicks = 0;
 		ap.playAnimation(animationID, 100,false);	
 		dir.scale(3000);
 		dir.add(location);
-		CollisionObject co = level.renderWorld.rayTest(location, dir);	
+		projectile.spawn(dir, location, rot);
+	//	CollisionObject co = level.renderWorld.rayTest(location, dir);	
 	}
 	
 	public void creatRecoilAnimation(){
@@ -55,6 +63,13 @@ public class RangeWeapon extends Weapon{
 		}*/
 		ap = new AnimationPlayer(reCoil);
 		animationID = ap.defineAnimation(0, 12);
+	}
+	
+	public void tick(){
+		deltaTicks++;
+		if(deltaTicks > 100000){
+			deltaTicks = ticksPerFire + 1;
+		}
 	}
 
 }

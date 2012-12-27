@@ -31,7 +31,7 @@ public class VisibleObjectHandler {
 		return m.duplicate();
 	}
 	
-	public static VisibleObject getModel(String name){
+	public static VisibleObject getVisableObject(String name){
 		for(VisibleObject vo : vObjs){
 			if( vo.getName().equals(name)){
 				return vo;

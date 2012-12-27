@@ -39,6 +39,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
+import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 
 public class AnimatedModel implements VisibleObject{
@@ -398,6 +399,26 @@ public class AnimatedModel implements VisibleObject{
 	@Override
 	public String getName() {
 		return name;
+	}
+	@Override
+	public void rot(Vector3f rot) {
+		if(rigidBody == null){
+			this.rot = rot;
+		}
+		Transform temp = new Transform();
+		rigidBody.getWorldTransform(temp);
+		Quat4f temp2 = new Quat4f();
+		QuaternionUtil.setEuler(temp2, rot.y, rot.x, rot.z);
+		temp.setRotation(temp2);
+		rigidBody.setWorldTransform(temp);
+	}
+	@Override
+	public Point3d getLocation() {
+		return location;
+	}
+	@Override
+	public Vector3f getRot() {
+		return rot;
 	}
 
 }

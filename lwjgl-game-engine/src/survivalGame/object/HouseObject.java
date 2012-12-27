@@ -5,7 +5,7 @@ import survivalGame.VisibleObjectHandler;
 public class HouseObject extends Object{
 
 	public HouseObject(){
-		super(VisibleObjectHandler.getModel("Object_House"));
+		super(VisibleObjectHandler.getVisableObject("Object_House"));
 	}
 	
 }

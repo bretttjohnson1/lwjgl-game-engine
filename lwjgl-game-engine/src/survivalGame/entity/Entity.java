@@ -14,9 +14,8 @@ public class Entity {
 	VisibleObject rendarbleObject;
 	Level level;
 	
-	public Entity(int visibleObjectID, Level level){
-		if(visibleObjectID > 0)
-			this.rendarbleObject = VisibleObjectHandler.getModel(visibleObjectID);
+	public Entity(VisibleObject vo, Level level){
+		rendarbleObject = vo;
 		this.level = level;
 		location = new Vector3f();
 	}
@@ -33,6 +32,5 @@ public class Entity {
 	
 	public void setLocation(Vector3f loc){
 		this.location = loc;
-	}
-	
+	}	
 }

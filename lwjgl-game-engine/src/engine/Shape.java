@@ -361,5 +361,23 @@ public class Shape implements VisibleObject,Serializable {
 		return null;
 	}
 
+	@Override
+	public void rot(javax.vecmath.Vector3f rot) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Point3d getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public javax.vecmath.Vector3f getRot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

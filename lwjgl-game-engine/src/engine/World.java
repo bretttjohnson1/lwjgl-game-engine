@@ -131,8 +131,12 @@ public class World {
 	}
 		
 	public void tick(){		
-		for(int i=0;i<visibleObjects.size();i++){
-			visibleObjects.get(i).tick();		
+		try{
+			for(int i=0;i<visibleObjects.size();i++){
+				visibleObjects.get(i).tick();		
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 	public void addVisisbleHUDObject(VisibleObject v){

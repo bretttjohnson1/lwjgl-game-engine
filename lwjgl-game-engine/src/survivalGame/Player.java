@@ -7,7 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import survivalGame.entity.EntityLightFlashLight;
-import survivalGame.weapon.RangeWeapon;
+import survivalGame.weapon.WeaponRange;
 import survivalGame.weapon.Weapon;
 
 import com.bulletphysics.collision.shapes.CapsuleShape;
@@ -49,6 +49,7 @@ public class Player {
 		flashLight = new EntityLightFlashLight(level);		
 		level.addEntity(flashLight);
 		this.camera = camera;
+		level.setPlayer(this);
 	}
 	
 	float roty;
@@ -57,7 +58,7 @@ public class Player {
 	//float protx;
 	//float proty;
 	
-	public void tick(){
+	public void tick(){		
 		//proty = (float) camera.roty;
 		//protx = (float) camera.rotx;
 		camera.rotx -= ((double) Mouse.getDY())/4;
@@ -139,6 +140,9 @@ public class Player {
 		camera.y = mLoc.y-1;
 		camera.z = mLoc.z;
 		//System.out.println(mobControler.checkCollisionWithOtherObject());
+		if(weapon != null){
+			weapon.tick();
+		}
 	}
 	
 	public void physTick(){
@@ -158,8 +162,8 @@ public class Player {
 		wModel.setVisable(true);
 		wModel.move(new Point3d(0.2f,-0.5f,0.1f));
 		wModel.rot(0, 0, 0);
-		if(weapon instanceof RangeWeapon)
-		((RangeWeapon) weapon).creatRecoilAnimation();
+		if(weapon instanceof WeaponRange)
+		((WeaponRange) weapon).creatRecoilAnimation();
 	}
 	public Point3d getLocation(){
 		return mobControler.getLocation().duplicate();

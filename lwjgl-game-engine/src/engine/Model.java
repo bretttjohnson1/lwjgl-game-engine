@@ -108,6 +108,7 @@ public class Model implements VisibleObject, Serializable{
 		
 	}
 	public void removeFromPhysWorld(){
+		if(rb!=null)
 		world.phys.needToBeRemoved.add(rb);
 	}
 	public void addToPhysWorld(CollisionShape cs,float mass){
@@ -576,6 +577,19 @@ public class Model implements VisibleObject, Serializable{
 	@Override
 	public String getName() {
 		return name;		
+	}
+	@Override
+	public void rot(Vector3f rot) {
+		rot(rot.x,rot.y,rot.z);
+		
+	}
+	@Override
+	public Point3d getLocation() {
+		return location;
+	}
+	@Override
+	public Vector3f getRot() {
+		return rot;
 	}	
 
 }

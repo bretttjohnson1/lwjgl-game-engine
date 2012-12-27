@@ -15,7 +15,7 @@ public class EntityLight extends Entity{
 	
 	public Light light;
 	public EntityLight( Level level, int id) {
-		super(0, level);
+		super(null, level);
 		light = new Light(0, 0, 0, id);
 		light.setDiffuse(new Vector4f(1,1,1,1));
 		light.setAmbient(new Vector4f(0.1f,0.1f,0.1f,0.3f));

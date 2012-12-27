@@ -562,4 +562,19 @@ public class TerrainManager implements VisibleObject{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public void rot(Vector3f rot) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Point3d getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Vector3f getRot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
