@@ -85,7 +85,7 @@ public class TerrainManager implements VisibleObject{
 
 	//Camera cam;
 	public TerrainManager(){
-		
+
 	}
 	public boolean getVisable(){
 		return true;
@@ -98,7 +98,7 @@ public class TerrainManager implements VisibleObject{
 			texs = BufferUtils.createFloatBuffer(terrainsRenders.length *defc*defc*12);
 			normals = BufferUtils.createFloatBuffer(terrainsRenders.length *defc*defc*18);
 		}
-		
+
 		verts.clear();
 		texs.clear();
 		normals.clear();
@@ -126,13 +126,13 @@ public class TerrainManager implements VisibleObject{
 		texs.position(0);
 		normals.position(0);
 		vboUpdated = false;
-	/*	for(int i=0;i<verts.capacity();i++){
+		/*	for(int i=0;i<verts.capacity();i++){
 			System.out.println(verts.get(i));
 		}*/				
 	}
 
 	public void update(float x, float z){
-	//	System.out.println("Player: " + x + "," + z);
+		//	System.out.println("Player: " + x + "," + z);
 		for(int i=0;i<Tera.size();i++){
 			Terrain t = Tera.get(i);
 			//if((t.startx-x/mag<def&&t.startx-x/mag>=0)&&
@@ -141,11 +141,11 @@ public class TerrainManager implements VisibleObject{
 			//	System.out.println("sX: " + t.startx + " sZ: " + t.starty) ;
 			float xMag = x/mag, zMag = z/mag;
 
-			
+
 			if((xMag > t.startx && xMag < t.startx +(defc-1)) && (zMag > t.starty && zMag < t.starty + (defc-1))){			
 				if(t != currentTerrain){
 					currentTerrain=t;
-				//	System.out.println(t.startx + " NEWCHUNK " + t.starty);
+					//	System.out.println(t.startx + " NEWCHUNK " + t.starty);
 
 					ArrayList<Terrain> tempT = new ArrayList<Terrain>();
 					boolean[][] exist = new boolean[3][3];
@@ -173,34 +173,35 @@ public class TerrainManager implements VisibleObject{
 						}
 
 					}
-					
+
 					//System.out.println("Count: " + tempT.size());
 					int newCount = 0;
 					if(tempT.size() <9){
 						for(int b=0;b<3;b++){
 							for(int c=0;c<3;c++){
+								if(c==0 && b==0) continue;
 								if(!exist[c][b]){
 									//System.out.println(newCount);
 									newCount++;
 									//System.out.println("Gen new T At:  X: " + t.startx+((1-c)*(defc-1)) + " Z: " + t.starty+((b-1)*(defc-1)));
 									Terrain newTerrain = new Terrain(t.startx+((1-c)*(defc-1)),t.starty+((b-1)*(defc-1)),noise);
 									int[] adj=getAdjacentChunks(newTerrain);
-								//	test = Tera.get(5).ntop;
-										float[]top=new float[defc];
+									//	test = Tera.get(5).ntop;
+									float[]top=new float[defc];
 									if(adj[1]!=-1)top=Tera.get(adj[1]).nbottom;
-										
-										float[]left=new float[defc];
+
+									float[]left=new float[defc];
 									if(adj[2]!=-1)left=Tera.get(adj[2]).nright;
-									
-										float[]right=new float[defc];
+
+									float[]right=new float[defc];
 									if(adj[3]!=-1)right=Tera.get(adj[3]).nleft;
-									
-										float[]bottom=new float[defc];
+
+									float[]bottom=new float[defc];
 									if(adj[4]!=-1)bottom=Tera.get(adj[4]).ntop;
-									
+
 									newTerrain.setSeed(top, left,right,bottom, true);
-								//	newTerrain.setSeed(test,test,test,test,true);
-								//	System.out.println(right[1]);
+									//	newTerrain.setSeed(test,test,test,test,true);
+									//	System.out.println(right[1]);
 									newTerrain.genTerrain((defc), image,mag);
 									Tera.add(newTerrain);
 									addTerrainToPhys(newTerrain);
@@ -213,6 +214,38 @@ public class TerrainManager implements VisibleObject{
 								}
 							}
 						}
+					}
+					if(!exist[0][0]){
+						//System.out.println(newCount);
+						newCount++;
+						//System.out.println("Gen new T At:  X: " + t.startx+((1-c)*(defc-1)) + " Z: " + t.starty+((b-1)*(defc-1)));
+						Terrain newTerrain = new Terrain(t.startx+((1)*(defc-1)),t.starty+((-1)*(defc-1)),noise);
+						int[] adj=getAdjacentChunks(newTerrain);
+						//	test = Tera.get(5).ntop;
+						float[]top=new float[defc];
+						if(adj[1]!=-1)top=Tera.get(adj[1]).nbottom;
+
+						float[]left=new float[defc];
+						if(adj[2]!=-1)left=Tera.get(adj[2]).nright;
+
+						float[]right=new float[defc];
+						if(adj[3]!=-1)right=Tera.get(adj[3]).nleft;
+
+						float[]bottom=new float[defc];
+						if(adj[4]!=-1)bottom=Tera.get(adj[4]).ntop;
+
+						newTerrain.setSeed(top, left,right,bottom, true);
+						//	newTerrain.setSeed(test,test,test,test,true);
+						//	System.out.println(right[1]);
+						newTerrain.genTerrain((defc), image,mag);
+						Tera.add(newTerrain);
+						addTerrainToPhys(newTerrain);
+						if(tempT.size()<9){
+							tempT.add(newTerrain);
+						}else{
+							System.out.println("OverFlow At gen!d");
+						}
+
 					}
 					Terrain[] terrainRenders = new Terrain[tempT.size()];
 					for(int k=0;k<tempT.size();k++){
@@ -233,12 +266,12 @@ public class TerrainManager implements VisibleObject{
 		2 is east; right
 		4 is west; bottom
 		0 is not used
-	 
+
 	 **/
 	int[] getAdjacentChunks(Terrain t){
 		int[]tempT = new int[5];
 		for (int a=0;a<tempT.length;a++)
-		tempT[a]=-1;
+			tempT[a]=-1;
 		for (int a=0;a<Tera.size();a++){
 			Terrain t2 = Tera.get(a);
 			float xDiff = (t.startx - t2.startx)/(defc-1);
@@ -246,15 +279,15 @@ public class TerrainManager implements VisibleObject{
 			if(Math.abs(xDiff) <= 1){
 				if(Math.abs(yDiff) <= 1){					
 					//	System.out.println(xDiff+" y "+yDiff);
-						if(xDiff==1 && yDiff==0)
-							tempT[1]=a;
-						if(xDiff==-1 && yDiff==0){
-							tempT[4]=a;
-						}
-						if(xDiff==0 && yDiff==-1)
-							tempT[3]=a;
-						if(xDiff==0 && yDiff==1)
-							tempT[2]=a;
+					if(xDiff==1 && yDiff==0)
+						tempT[1]=a;
+					if(xDiff==-1 && yDiff==0){
+						tempT[4]=a;
+					}
+					if(xDiff==0 && yDiff==-1)
+						tempT[3]=a;
+					if(xDiff==0 && yDiff==1)
+						tempT[2]=a;
 				}
 			}
 		}
@@ -270,7 +303,7 @@ public class TerrainManager implements VisibleObject{
 	}
 
 	public void Initgen(int def,File imageA, File imageB,float noise){
-		
+
 		this.def = def;
 		defc = (int) (Math.pow(2, def)+1);
 		this.noise=noise;
@@ -297,10 +330,10 @@ public class TerrainManager implements VisibleObject{
 		final float sizefactor=100;//size magnitude of terrain	
 		float a = (float) (1/(defc));
 		mag = (sizefactor/(defc-1f));
-		
-		
-		
-		
+
+
+
+
 		//t.genTerrain((int)((Math.pow(2, def))+1),image);
 		System.out.println("mag"+mag);
 		//-----------------------------was going to add multiple chunks
@@ -319,7 +352,7 @@ public class TerrainManager implements VisibleObject{
 				if(adj[2]!=-1)right=Tera.get(adj[2]).ntop;
 				float[]bottom=new float[defc];
 				if(adj[3]!=-1)bottom=Tera.get(adj[3]).nright;
-				t.setSeed(top, left, right, bottom, true);
+				//		t.setSeed(top, left, right, bottom, true);
 				t.genTerrain(defc,image,mag);
 				Tera.add(t);
 				addTerrainToPhys(t);
@@ -565,7 +598,7 @@ public class TerrainManager implements VisibleObject{
 	@Override
 	public void rot(Vector3f rot) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public Point3d getLocation() {
