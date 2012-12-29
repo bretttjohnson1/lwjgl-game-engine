@@ -169,7 +169,12 @@ public class World {
 				}
 			}
 		}
-		
+		for(int i=0;i<visibleHUDObject.size();i++){
+			VisibleObject v = visibleHUDObject.get(i);
+			if(v.getVisible()){
+				v.render();
+			}
+		}
 		
 		
 		
@@ -191,15 +196,6 @@ public class World {
 		//physWorld.debugDrawWorld();
 		GL11.glPopMatrix();
 		
-		
-		
-		
-		for(int i=0;i<visibleHUDObject.size();i++){
-			VisibleObject v = visibleHUDObject.get(i);
-			if(v.getVisible()){
-				v.render();
-			}
-		}
 		GL11.glDisable(GL_DEPTH_TEST);
 		if(hud !=null && currentMenu == null){
 			hud.render();

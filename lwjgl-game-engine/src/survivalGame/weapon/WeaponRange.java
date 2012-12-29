@@ -43,8 +43,9 @@ public class WeaponRange extends Weapon{
 		projectile = new EntityProjectileBullet(level);
 		deltaTicks = 0;
 		ap.playAnimation(animationID, 100,false);	
-		dir.scale(3000);
-		dir.add(location);
+		//dir.scale(3000);
+		dir.x = -dir.x;
+		dir.z = -dir.z;
 		projectile.spawn(dir, location, rot);
 	//	CollisionObject co = level.renderWorld.rayTest(location, dir);	
 	}

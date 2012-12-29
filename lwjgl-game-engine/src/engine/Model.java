@@ -319,7 +319,7 @@ public class Model implements VisibleObject, Serializable{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 		}
 		if(built == false){
-			if(textureBuffer == null){
+			if(texID == 0){
 				if(vertexBufferID < 1) vertexBufferID = ARBVertexBufferObject.glGenBuffersARB();
 				if(normalBufferID < 1) normalBufferID = ARBVertexBufferObject.glGenBuffersARB();
 				DoubleBuffer verts = BufferUtils.createDoubleBuffer(faces.size() * 9);
@@ -425,8 +425,7 @@ public class Model implements VisibleObject, Serializable{
 				//loadTexture();
 			}
 		}else{
-			if(textureBuffer == null){
-
+			if(texID == 0){
 				GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);			
 				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);		
 				GL11.glVertexPointer(3, GL11.GL_DOUBLE, 0,0L);			
@@ -540,7 +539,7 @@ public class Model implements VisibleObject, Serializable{
 		}
 	}
 
-	public Model duplicate(){		
+	public Model duplicate(){	
 		Model m = new Model();
 		m.location = location.duplicate();
 		m.image = image;

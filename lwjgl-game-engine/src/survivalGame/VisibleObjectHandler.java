@@ -34,6 +34,10 @@ public class VisibleObjectHandler {
 	public static VisibleObject getVisableObject(String name){
 		for(VisibleObject vo : vObjs){
 			if( vo.getName().equals(name)){
+				if(vo instanceof Model)
+					return ((Model)vo).duplicate();
+				if(vo instanceof AnimatedModel)
+					return ((AnimatedModel) vo);
 				return vo;
 			}
 		}
@@ -50,6 +54,7 @@ public class VisibleObjectHandler {
 				vObjs.add(am);	
 				am.lodedFromFile();
 				am.setVisible(false);
+				w.addObject(am);
 				ois.close();
 			}
 		}else{
@@ -61,6 +66,7 @@ public class VisibleObjectHandler {
 				System.out.println(m.name);
 				m.loadedFromFile();
 				m.setVisable(false);
+				w.addObject(m);
 				ois.close();
 			}
 		}

@@ -148,7 +148,7 @@ public class Player {
 	public void physTick(){
 		if(Mouse.isButtonDown(0)) {
 			if(weapon != null) {
-				System.out.println(rotx);
+		//		System.out.println(rotx);
 				weapon.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
 			}
 		}

@@ -15,9 +15,11 @@ import survivalGame.object.HouseObject;
 import survivalGame.object.Object;
 import survivalGame.object.ObjectTerrain;
 import survivalGame.object.ObjectTest;
+import survivalGame.weapon.Weapon;
 import survivalGame.weapon.WeaponRange;
 import survivalGame.weapon.WeaponAK47;
 import survivalGame.weapon.WeaponPistol;
+import survivalGame.weapon.WeaponTestGun;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
@@ -94,11 +96,14 @@ public class SurvivalGame extends BasicGame {
 		world.setHUD(headsUpDisplay);
 		WeaponAK47 ak47 = new WeaponAK47(level);
 		WeaponPistol pistol = new WeaponPistol(level);
+		Weapon gun = new WeaponTestGun(level);
 		ItemWeapon itemAK47 = new ItemWeapon(ak47, 0);
 		ItemWeapon itemPistol = new ItemWeapon(pistol, 0);
+		ItemWeapon itemGun = new ItemWeapon(gun, 0);
 		
 		player.inventory.addItem(new InventoryItem(1, itemAK47));
 		player.inventory.addItem(new InventoryItem(1, itemPistol));
+		player.inventory.addItem(new InventoryItem(1, itemGun));
 		
 		player.setLocation(new Point3d(20,100,20));	
 		world.setMenu(null);		

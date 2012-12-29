@@ -44,7 +44,7 @@ public class Level {
 		}
 		renderWorld.addObject(e.getVisableObject());
 		e.getVisableObject().setVisible(true);
-		System.out.println("skldhjaslkdjsalkdjasolkdjs");
+		//System.out.println("skldhjaslkdjsalkdjasolkdjs");
 	} 
 	
 	public void removeEntity(Entity e){

@@ -21,7 +21,7 @@ public class EntityProjectile extends Entity{
 	
 	public EntityProjectile(VisibleObject vo,Level level){
 		super(vo, level);
-		projectileModel = (Model) vo;
+		projectileModel = ((Model) vo);
 		rendarbleObject = projectileModel;
 		
 	}
@@ -51,7 +51,7 @@ public class EntityProjectile extends Entity{
 	}
 	
 	public void spawn(Vector3f dir, Vector3f location, Vector3f rot){
-		level.esm.spawnEntity(this, 10);
+		level.esm.spawnEntity(this, 400);
 		rendarbleObject.setVisible(true);
 		projectileModel.addToPhysWorld(new SphereShape(0.3f),0.2f);
 		projectileModel.move(new Point3d((-dir.x*1.5 + location.x),dir.y + location.y,-dir.z*1.5 + location.z));
