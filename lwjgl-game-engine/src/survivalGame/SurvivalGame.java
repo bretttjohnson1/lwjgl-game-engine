@@ -10,6 +10,7 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.input.Keyboard;
 
 import survivalGame.entity.EntityItem;
+import survivalGame.entity.EntityPlayer;
 import survivalGame.item.ItemWeapon;
 import survivalGame.object.HouseObject;
 import survivalGame.object.Object;
@@ -41,6 +42,7 @@ public class SurvivalGame extends BasicGame {
 	float jumpForce = 300;
 	static GameManager gm;
 	Player player;
+	EntityPlayer entityPlayer;
 	Level level;	
 	WeaponRange[] weapons = new WeaponRange[2];
 	Object test = null;
@@ -64,6 +66,7 @@ public class SurvivalGame extends BasicGame {
 		world.setMenu(new MenuLoading(world).menu);		
 		level = new Level(world);
 		player = new Player(level, speed, runFactor, jumpForce,camera);
+		entityPlayer = new EntityPlayer(null, level, player);
 		setGravity(new Vector3f(0,-9.8f,0));
 		gm.grabMouse = true;
 		try {
@@ -157,7 +160,7 @@ public class SurvivalGame extends BasicGame {
 			if(!tabPressed){
 				tabPressed = true;
 				if(level.menu == null){ 
-					BaseMenu inventoryMenu = new MenuInventory(world, player.inventory, player);
+					BaseMenu inventoryMenu = new MenuPlayerInventory(world, entityPlayer);
 					level.setMenu(inventoryMenu);
 				}else{
 					level.setMenu(null);

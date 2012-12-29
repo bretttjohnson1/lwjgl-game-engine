@@ -553,6 +553,7 @@ public class Model implements VisibleObject, Serializable{
 		m.texID = texID;
 		m.built = true;
 		m.faces = faces;
+		m.name = name;
 		//if(world != null){
 		//	world.addObject(m);
 		//}

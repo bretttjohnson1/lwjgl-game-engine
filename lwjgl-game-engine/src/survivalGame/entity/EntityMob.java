@@ -4,6 +4,7 @@ import javax.vecmath.Vector3f;
 
 import survivalGame.Level;
 import survivalGame.MobAI;
+import survivalGame.item.Item;
 import engine.AnimatedModel;
 import engine.AnimationPlayer;
 import engine.MobControler;
@@ -35,6 +36,7 @@ public class EntityMob extends Entity {
 	@Override
 	public void tick() {
 		if(controler == null) return;
+		if(mobAI == null) return;
 		rendarbleObject.move(controler.getLocation());
 		rendarbleObject.rot(controler.getRot());
 		mobAI.tick();
@@ -57,6 +59,9 @@ public class EntityMob extends Entity {
 		}else{
 			ap.stopAnimation();
 		}
+	}
+	public void equip(Item item){
+		//TODO: Write general equip code
 	}
 	
 }

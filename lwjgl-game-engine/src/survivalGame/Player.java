@@ -7,6 +7,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import survivalGame.entity.EntityLightFlashLight;
+import survivalGame.item.Item;
+import survivalGame.item.ItemWeapon;
 import survivalGame.weapon.WeaponRange;
 import survivalGame.weapon.Weapon;
 
@@ -21,7 +23,7 @@ import engine.Utils;
 import engine.World;
 
 public class Player {
-	Weapon weapon;
+	Item item;
 	MobControler mobControler;
 	Model wModel = null;
 	public Inventory inventory;
@@ -140,30 +142,33 @@ public class Player {
 		camera.y = mLoc.y-1;
 		camera.z = mLoc.z;
 		//System.out.println(mobControler.checkCollisionWithOtherObject());
-		if(weapon != null){
-			weapon.tick();
+		if(item != null){
+			item.tick();
 		}
 	}
 	
 	public void physTick(){
 		if(Mouse.isButtonDown(0)) {
-			if(weapon != null) {
+			if(item != null) {
 		//		System.out.println(rotx);
-				weapon.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
+				item.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
 			}
 		}
 	}
 	
-	public void setWeapon(Weapon weapon2){
-		if(weapon != null) world.removeVisibleHUDObject(weapon.weaponModel);
-		this.weapon = weapon2;
-		wModel = weapon2.weaponModel;
+	public void equip(Item item){
+		if(this.item != null) world.removeVisibleHUDObject(this.item.model);
+		this.item = item;
+		wModel = item.model;
 		world.addVisisbleHUDObject(wModel);
 		wModel.setVisable(true);
 		wModel.move(new Point3d(0.2f,-0.5f,0.1f));
 		wModel.rot(0, 0, 0);
-		if(weapon instanceof WeaponRange)
-		((WeaponRange) weapon).creatRecoilAnimation();
+		if(item instanceof ItemWeapon){
+			if(((ItemWeapon) item).weapon instanceof WeaponRange){
+				((WeaponRange)((ItemWeapon) item).weapon).creatRecoilAnimation();
+			}
+		}
 	}
 	public Point3d getLocation(){
 		return mobControler.getLocation().duplicate();

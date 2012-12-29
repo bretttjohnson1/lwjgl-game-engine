@@ -18,6 +18,8 @@ public class MenuButton {
 	BufferedImage image;	
 	int x, y, width, height;
 	Menu menu = null;
+	boolean pressedRight = false;
+	boolean pressedLeft = false;
 	
 	
 	public static final int BUTTON_CLICKED_LEFT = 0;
@@ -95,23 +97,31 @@ public class MenuButton {
 		
 		if(al0 != null){
 			if(Mouse.isButtonDown(0)){				
-				
-				if(mx > x && mx < (x+width)){
-					if(my > y && my < (y+height)){
-						al0.actionPerformed(new MenuButtonClickedEvent(this, 0, name));
+				if(!pressedLeft){
+					pressedLeft = true;
+					if(mx > x && mx < (x+width)){
+						if(my > y && my < (y+height)){
+							al0.actionPerformed(new MenuButtonClickedEvent(this, 0, name));
+						}
 					}
-				}
+				}				
+			}else{
+				pressedLeft = false;
 			}
-			
 		}
 		if(al1 != null){
-			if(Mouse.isButtonDown(1)){				
-				if(mx > x && mx < (x+width)){
-					if(my > y && my < (y+height)){
-						al1.actionPerformed(new MenuButtonClickedEvent(this, 1, name));
+			if(Mouse.isButtonDown(1)){	
+				if(!pressedRight){
+					pressedRight = true;
+					if(mx > x && mx < (x+width)){
+						if(my > y && my < (y+height)){
+							al1.actionPerformed(new MenuButtonClickedEvent(this, 1, name));
+						}
 					}
-				}
-			}			
+				}			
+			}else{
+				pressedRight = false;
+			}
 		}
 		if(al2 != null){
 			if(mx > x && mx < (x+width)){

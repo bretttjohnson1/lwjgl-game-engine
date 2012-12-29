@@ -17,6 +17,7 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
+import survivalGame.entity.EntityPlayer;
 import survivalGame.item.Item;
 import survivalGame.item.ItemWeapon;
 
@@ -25,19 +26,20 @@ import engine.World;
 import engine.menu.Menu;
 import engine.menu.MenuButton;
 
-public class MenuInventory extends BaseMenu implements ActionListener{
+public class MenuPlayerInventory extends BaseMenu implements ActionListener{
 
 	ArrayList<MenuButton> things = new ArrayList<MenuButton>();
 	BufferedImage menuScrollButtonImage;
 	MenuButton scroll;
 	MenuButton[] itemButtons;
 	InventoryItem[] items;
-	Player player;
+	EntityPlayer player;
 	MenuButton equiped;
-	public MenuInventory(World w, Inventory i, Player player) {
+	public MenuPlayerInventory(World w, EntityPlayer player) {
 		super(w);
 		this.player = player;
-		items = i.getArray();
+		
+		items = player.player.inventory.getArray();
 		itemButtons = new MenuButton[items.length]; 
 		menuScrollButtonImage = new BufferedImage(20,1000,BufferedImage.TYPE_3BYTE_BGR);
 		BufferedImage eq = new BufferedImage(20,20,BufferedImage.TYPE_4BYTE_ABGR);
@@ -101,10 +103,8 @@ public class MenuInventory extends BaseMenu implements ActionListener{
 		if(!(arg0.getSource() instanceof MenuButton)) return;
 		MenuButton b =(MenuButton) arg0.getSource();
 		for(int i=0;i<itemButtons.length;i++){
-			if(b == itemButtons[i]){
-				if(items[i].item instanceof ItemWeapon){
-					player.setWeapon(((ItemWeapon) items[i].item).weapon);
-				}
+			if(b == itemButtons[i]){				
+				items[i].item.equip(player);				
 			}
 		}
 	}

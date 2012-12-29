@@ -144,7 +144,15 @@ public class World {
 	}
 	
 	public void removeVisibleHUDObject(VisibleObject v){
-		visibleHUDObject.remove(v);
+		visibleHUDObject.remove(v);		
+	}
+	
+	public void removeVisibleHUDObjectByName(String name){
+		for(int i=0;i<visibleHUDObject.size();i++){
+			if(visibleHUDObject.get(i).getName().equals(name)){
+				visibleHUDObject.remove(i);
+			}
+		}
 	}
 	
 	public void render(){	
@@ -171,8 +179,9 @@ public class World {
 		}
 		for(int i=0;i<visibleHUDObject.size();i++){
 			VisibleObject v = visibleHUDObject.get(i);
-			if(v.getVisible()){
+			if(v !=null && v.getVisible()){
 				v.render();
+			///	System.out.println(v.getName());
 			}
 		}
 		
@@ -184,7 +193,7 @@ public class World {
 		GL11.glTranslated(camera.x, camera.y, camera.z);	
 		
 		for(int i = 0;i<visibleObjects.size();i++){	
-			if(visibleObjects.get(i).getVisible() || renderTickNumber < 5){
+			if(visibleObjects.get(i)!=null && visibleObjects.get(i).getVisible() || renderTickNumber < 5){
 				visibleObjects.get(i).render();
 			}
 		}	

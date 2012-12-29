@@ -2,6 +2,12 @@ package survivalGame.item;
 
 import java.awt.image.BufferedImage;
 
+import javax.vecmath.Vector3f;
+
+import survivalGame.Player;
+import survivalGame.entity.Entity;
+import survivalGame.entity.EntityMob;
+
 import engine.Model;
 
 public class Item {
@@ -18,5 +24,14 @@ public class Item {
 		this.image= image;
 		this.weight = weight;
 	}
+	
+	public void equip(EntityMob entity){
+		entity.equip(this);
+	}
+
+	public void tick() {}
+
+	public void use(Vector3f dir, Vector3f loc,
+			Vector3f rot) {}
 	
 }

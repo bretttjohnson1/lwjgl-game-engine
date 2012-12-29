@@ -1,5 +1,8 @@
 package survivalGame.item;
 
+import javax.vecmath.Vector3f;
+
+import survivalGame.entity.Entity;
 import survivalGame.weapon.Weapon;
 
 
@@ -11,4 +14,13 @@ public class ItemWeapon extends Item{
 	}
 	public Weapon weapon;
 	
+	@Override
+	public void tick() {
+		weapon.tick();
+	}
+	@Override
+	public void use(Vector3f dir, Vector3f loc,
+			Vector3f rot) {
+		weapon.use(dir, loc, rot);
+	}	
 }
