@@ -25,7 +25,7 @@ public class WeaponRange extends Weapon{
 	
 	public WeaponRange(Model model, Level level){
 		super(model,level);
-		
+		projectile = new EntityProjectileBullet(level);
 	}
 	
 	
@@ -40,7 +40,7 @@ public class WeaponRange extends Weapon{
 	
 	public void use(Vector3f dir, Vector3f location, Vector3f rot){
 		if(!(deltaTicks>=ticksPerFire)) return;
-		projectile = new EntityProjectileBullet(level);
+		projectile = projectile.duplicate();
 		deltaTicks = 0;
 		ap.playAnimation(animationID, 100,false);	
 		//dir.scale(3000);

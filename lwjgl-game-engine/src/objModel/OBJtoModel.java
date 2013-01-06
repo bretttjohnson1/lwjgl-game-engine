@@ -44,7 +44,7 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 	JButton openImage,openOBJ,save,convert;
 	JFileChooser jfc = new JFileChooser();
 	JTextField numFrames = new JTextField();
-	JTextField name = new JTextField("Enter Name Here");
+	//JTextField name = new JTextField("Enter Name Here");
 	Light light = new Light(0, 10, 0, 1);
 	JCheckBox checkBoxAnimatedModel = new JCheckBox("Animated Model");
 	
@@ -92,9 +92,9 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		numFrames.setSize(30, 25);
 		window.add(numFrames);
 		
-		name.setLocation(800, 48);
-		name.setSize(120, 25);
-		window.add(name);
+	//	name.setLocation(800, 48);
+	//	name.setSize(120, 25);
+	//	window.add(name);
 		
 		checkBoxAnimatedModel.setLocation(670, 27);
 		checkBoxAnimatedModel.setSize(150, 20);
@@ -170,10 +170,10 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 			}
 			try {
 				if(am != null){
-					am.name = name.getText();
+		//			am.name = name.getText();
 					oos.writeObject(am);
 				}else{
-					l.name = name.getText();
+			//		l.name = name.getText();
 					oos.writeObject(l);
 				}				
 			} catch (IOException e1) {
@@ -192,23 +192,40 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 			convert.setEnabled(false);
 		}
 	}
+	double factor = (Math.PI/180);
+	double speed = 0.5;
 	@Override
 	public void tick() {
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-			camera.z += 0.5;
+			camera.x -= Math.sin(camera.roty*factor)*speed;
+			camera.y += Math.sin(camera.rotx*factor)*speed;
+			camera.z += Math.cos(camera.roty*factor)*speed;
+
 		}
-		
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-			camera.z -= 0.5;
+			camera.x += Math.sin(camera.roty*factor)*speed;
+			camera.y -= Math.sin(camera.rotx*factor)*speed;
+			camera.z -= Math.cos(camera.roty*factor)*speed;
 		}
-		
 		if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-			camera.x += 0.5;
+			camera.x -= Math.sin((camera.roty-90)*factor)*speed;
+
+			camera.z += Math.cos((camera.roty-90)*factor)*speed;
 		}
-		
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			camera.x -= 0.5;
+			camera.x -= Math.sin((camera.roty+90)*factor)*speed;
+			camera.z += Math.cos((camera.roty+90)*factor)*speed;
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+			camera.roty -= 1;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+			camera.roty += 1;
+		}
+
 		if(!window.isVisible()) gm.cleanupAndEndGame();
 	}
 }

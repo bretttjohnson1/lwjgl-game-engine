@@ -248,45 +248,18 @@ public class Terrain{
 		}
 
 		points=new float[def*def*2*3*3];                          
-		ByteBuffer verts = ByteBuffer.allocate((def-1)*(def-1)*8*4);
-		ByteBuffer indes = ByteBuffer.allocate((def-1)*(def-1)*18*4);
+		ByteBuffer verts = ByteBuffer.allocate(points.length*4);
+		ByteBuffer indes = ByteBuffer.allocate((points.length/3)*4);
 		int i2 = 0;
 		int i3 = 0;
 		for(int a=0;a<Chunk.length-1;a++){
 			for (int b=0;b<Chunk.length-1;b++){
-				
-				//int i2 = a*b;	
-				verts.putFloat((a + startx));     //0
-				verts.putFloat(Chunk[a][b]);    //1
-				verts.putFloat((b + starty));     //2 
-				verts.putFloat((a + 1 + startx)); //3
-				verts.putFloat(Chunk[a+1][b]);  //4
-				verts.putFloat((b + 1 + starty)); //5
-				verts.putFloat(Chunk[a][b+1]);  //6
-				verts.putFloat(Chunk[a+1][b+1]);//7
-				
-				indes.putInt(i3+0);
+				indes.putInt(i3);
 				indes.putInt(i3+1);
 				indes.putInt(i3+2);
 				
 				indes.putInt(i3+3);
 				indes.putInt(i3+4);
-				indes.putInt(i3+2);
-				
-				indes.putInt(i3+0);
-				indes.putInt(i3+6);
-				indes.putInt(i3+5);
-				//---------------------------------					
-				indes.putInt(i3+3);
-				indes.putInt(i3+7);
-				indes.putInt(i3+2);
-				
-				indes.putInt(i3+3);
-				indes.putInt(i3+4);
-				indes.putInt(i3+2);
-				
-				indes.putInt(i3+0);
-				indes.putInt(i3+6);
 				indes.putInt(i3+5);
 				
 				points[i2] = a + startx;   
@@ -314,7 +287,7 @@ public class Terrain{
 				points[i2+17] = b +  1 + starty;
 				
 				i2+=18;
-				i3+=8;
+				i3+=6;
 			}
 		}
 	//System.out.println(i3);
@@ -322,6 +295,7 @@ public class Terrain{
 		
 		for(int a=0;a<points.length;a+=1){
 	//		System.out.println(points[a]);	
+			verts.putFloat(points[a]);
 			points[a] *= mag;	
 			
 		} 
@@ -421,7 +395,7 @@ public class Terrain{
 		}
 		normalPart.rewind();
 	
-		TriangleIndexVertexArray tiva = new TriangleIndexVertexArray((def-1)*(def-1)*2, indes, 3*3*4, (def-1)*(def-1)*8, verts, 4);
+		TriangleIndexVertexArray tiva = new TriangleIndexVertexArray(points.length/9, indes, 3*4, points.length/3, verts, 4*3);
 		tiva.setScaling(new Vector3f(mag,mag,mag));
 		TriangleMeshShape tms = new BvhTriangleMeshShape(tiva, true);
 		

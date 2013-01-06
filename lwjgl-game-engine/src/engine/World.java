@@ -127,7 +127,6 @@ public class World {
 //		physWorld.getPairCache().setInternalGhostPairCallback(gpc);
 		physWorld.setGravity(gravity);
 	//	physWorld.setDebugDrawer(new JBulletDebug());
-		
 	}
 		
 	public void tick(){		
@@ -202,7 +201,7 @@ public class World {
 				lights.get(i).enable();
 			}
 		}
-		//physWorld.debugDrawWorld();
+	//	physWorld.debugDrawWorld();
 		GL11.glPopMatrix();
 		
 		GL11.glDisable(GL_DEPTH_TEST);

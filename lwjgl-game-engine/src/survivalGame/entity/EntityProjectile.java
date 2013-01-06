@@ -29,7 +29,8 @@ public class EntityProjectile extends Entity{
 	Model projectileModel;
 	Vector3f location;
 	int damage = 0;
-	int initVel = 0;
+	int initVel = 0;	
+	int life = 400;
 	
 	
 	public int getDamege(){
@@ -51,14 +52,16 @@ public class EntityProjectile extends Entity{
 	}
 	
 	public void spawn(Vector3f dir, Vector3f location, Vector3f rot){
-		level.esm.spawnEntity(this, 400);
+		level.esm.spawnEntity(this, life);
 		rendarbleObject.setVisible(true);
 		projectileModel.addToPhysWorld(new SphereShape(0.3f),0.2f);
 		projectileModel.move(new Point3d((-dir.x*1.5 + location.x),dir.y + location.y,-dir.z*1.5 + location.z));
 		projectileModel.rot(0, -rot.y, 0);
 		projectileModel.rb.applyForce(new Vector3f(-dir.x*initVel,dir.y*initVel,-dir.z*initVel), new Vector3f(0,0,0));
 	}
-	
+	public EntityProjectile duplicate(){
+		return new EntityProjectile(rendarbleObject, level);
+	}
 
 	
 }

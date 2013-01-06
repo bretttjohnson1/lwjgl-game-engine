@@ -190,6 +190,53 @@ public class Model implements VisibleObject, Serializable{
 		world.phys.needToBeAdded.add(rb);
 
 	}
+	public void addToPhysWorldBVH(float mass){		
+		this.mass = mass;
+		dynamic = true;
+		ByteBuffer verts = ByteBuffer.allocateDirect(faces.size()*3*4);
+		verts.order(ByteOrder.nativeOrder());
+		ByteBuffer indes = ByteBuffer.allocateDirect(faces.size()*3*4*3);
+		indes.order(ByteOrder.nativeOrder());
+		verts.clear();
+		indes.clear();	    
+		for(Point3d p: vertices){
+			verts.putFloat((float) p.x);	
+			verts.putFloat((float) p.y);	
+			verts.putFloat((float) p.z);	    	
+		}	   
+		for(Face f: faces){		
+			indes.putInt((int) f.vertex.x-1);
+			indes.putInt((int) f.vertex.x-1);
+			indes.putInt((int) f.vertex.x-1);
+
+			indes.putInt((int) f.vertex.y-1);
+			indes.putInt((int) f.vertex.y-1);
+			indes.putInt((int) f.vertex.y-1);
+
+			indes.putInt((int) f.vertex.z-1);
+			indes.putInt((int) f.vertex.z-1);
+			indes.putInt((int) f.vertex.z-1);
+		}
+	//	for(int i=0;i<indes.capacity();i+=4){
+	//		System.out.println(indes.getInt(i));
+	//	}
+		verts.flip();
+		indes.flip();		
+		TriangleIndexVertexArray smi = new TriangleIndexVertexArray(faces.size(),indes,3*4*3,faces.size()*3,verts,3*4);		
+		BvhTriangleMeshShape cs = new BvhTriangleMeshShape(smi,true);	
+
+		Transform t = new Transform();
+		t.setIdentity();
+		t.origin.set((float)location.x,(float)location.y,(float)location.z);
+		MotionState ms = new DefaultMotionState(t);
+		RigidBodyConstructionInfo rbci = null;	
+		collisonShape = cs;
+		rbci = new RigidBodyConstructionInfo(mass, ms, cs);		
+		rb = new RigidBody(rbci);
+		if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
+		world.phys.needToBeAdded.add(rb);
+
+	}
 	public void addToPhysWorld(float mass){
 		this.mass = mass;
 		dynamic = false;
@@ -309,6 +356,7 @@ public class Model implements VisibleObject, Serializable{
 
 	@Override
 	public void render() {
+	//	System.out.println(vertexBufferID + " " + getName());
 		if(!builtTexture){
 			builtTexture = true;			
 			loadTexture();
@@ -451,7 +499,6 @@ public class Model implements VisibleObject, Serializable{
 				ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
 				return;
 			}else{
-			//	System.out.println("rendering");
 				glBindTexture(GL_TEXTURE_2D, texID);
 
 				GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);			
