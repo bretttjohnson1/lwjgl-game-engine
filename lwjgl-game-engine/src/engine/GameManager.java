@@ -29,6 +29,7 @@ public class GameManager implements Runnable {
 	public boolean grabMouse = false;
 	public Phys physClass;
 	public static int ptps = 0;
+	public static boolean paused = false;
 	
 	
 	public void startGame(BasicGame game,int gameSpeed){
@@ -102,9 +103,11 @@ public class GameManager implements Runnable {
 			}
 			
 			if(game.world.currentMenu != null){
+				paused = true;
 				Mouse.setGrabbed(false);
 				continue;
 			}else{
+				paused = false;
 				if(grabMouse && !Mouse.isGrabbed()){
 					Mouse.setGrabbed(true);
 				}
@@ -176,8 +179,9 @@ class Phys implements Runnable {
 				}
 				
 				Thread.sleep(10);
-				finish = System.currentTimeMillis();			
-				game.world.physWorld.stepSimulation((finish - start),10,0.005f);
+				finish = System.currentTimeMillis();	
+				if(GameManager.paused == false)
+					game.world.physWorld.stepSimulation((finish - start),10,0.005f);
 		//		ptps = (int) ((finish - start)*1000);
 				start = System.currentTimeMillis();
 			}catch(Exception e){

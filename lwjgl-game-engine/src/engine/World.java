@@ -184,8 +184,6 @@ public class World {
 			}
 		}
 		
-		
-		
 		GL11.glRotated(camera.rotx, 1,0, 0);		
 		GL11.glRotated(camera.roty,0, 1,0);		
 		GL11.glRotated(camera.rotz,0,0, 1);		

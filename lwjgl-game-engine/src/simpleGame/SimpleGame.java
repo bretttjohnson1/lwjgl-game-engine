@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.vecmath.Vector3f;
@@ -69,7 +70,7 @@ public class SimpleGame  extends BasicGame{
 	Model terrain = null;
 	//	Light light = new Light(0, 0, 0, new Color3f(0,0.1f,0), 0);
 	MobControler player;
-	TerrainManager t = new TerrainManager();
+	TerrainManager t = new TerrainManager(new Random());
 	@Override
 	public void preInit() {
 		Vector3f v = new Vector3f(5,8,2); 
@@ -122,7 +123,7 @@ public class SimpleGame  extends BasicGame{
 		//	cube.addToPhysWorld(10f);
 		//	level.addToPhysWorld(0);//,new BoxShape(new Vector3f(100,1,100)));//,new BoxShape(new Vector3f(100,1,100)));
 
-		t.Initgen(2,new File("res/dirt.bmp"),new File("res/dirt.bmp"),2);		
+		t.Initgen(2,new File("res/dirt.bmp"),new File("res/dirt.bmp"),2,null);		
 		world.addObject(t);
 		//	camera.x = 100;
 		//	camera.z = 100;
@@ -212,7 +213,7 @@ public class SimpleGame  extends BasicGame{
 	//	if(Keyboard.isKeyDown(Keyboard.KEY_U)){
 		//	if(!uPressed){
 		//		System.out.println(-camera.x + " :X player loc Y: " + -camera.y);
-				t.update((float) -camera.x, (float) -camera.z);
+				t.update((float) -camera.x, (float) -camera.z,null);
 			//	uPressed = true;
 		//	}
 	//	}else{		

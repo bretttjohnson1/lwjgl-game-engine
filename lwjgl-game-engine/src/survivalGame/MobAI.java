@@ -22,8 +22,6 @@ public class MobAI {
 			findTarget();
 			return;
 		}
-		
-		
 	}
 	
 	public void findTarget(){

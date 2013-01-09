@@ -99,7 +99,6 @@ public class MenuPlayerInventory extends BaseMenu implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		System.out.println("action");
 		if(!(arg0.getSource() instanceof MenuButton)) return;
 		MenuButton b =(MenuButton) arg0.getSource();
 		for(int i=0;i<itemButtons.length;i++){

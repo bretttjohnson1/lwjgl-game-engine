@@ -29,6 +29,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.vecmath.Vector3f;
@@ -82,10 +83,11 @@ public class TerrainManager implements VisibleObject{
 	//Gets set in the initGenMethead
 	boolean phys = false;
 	int defc = (int) (Math.pow(2, def)+1);
+	Random random;
 
 	//Camera cam;
-	public TerrainManager(){
-
+	public TerrainManager(Random random){
+		this.random = random;
 	}
 	public boolean getVisable(){
 		return true;
@@ -131,7 +133,8 @@ public class TerrainManager implements VisibleObject{
 		}*/				
 	}
 
-	public void update(float x, float z){
+	public int update(float x, float z, Biome biome){
+		int numGenerated = 0;
 		//	System.out.println("Player: " + x + "," + z);
 		for(int i=0;i<Tera.size();i++){
 			Terrain t = Tera.get(i);
@@ -201,8 +204,9 @@ public class TerrainManager implements VisibleObject{
 
 									newTerrain.setSeed(top, left,right,bottom, true);
 									//	newTerrain.setSeed(test,test,test,test,true);
-									//	System.out.println(right[1]);
-									newTerrain.genTerrain((defc), image,mag);
+									//	System.ut.println(right[1]);
+									numGenerated++;
+									newTerrain.genTerrain((defc), image,mag,random,biome);
 									Tera.add(newTerrain);
 									addTerrainToPhys(newTerrain);
 									if(tempT.size()<9){
@@ -215,6 +219,7 @@ public class TerrainManager implements VisibleObject{
 							}
 						}
 					}
+					
 					if(!exist[0][0]){
 						//System.out.println(newCount);
 						newCount++;
@@ -237,7 +242,8 @@ public class TerrainManager implements VisibleObject{
 						newTerrain.setSeed(top, left,right,bottom, true);
 						//	newTerrain.setSeed(test,test,test,test,true);
 						//	System.out.println(right[1]);
-						newTerrain.genTerrain((defc), image,mag);
+						numGenerated++;
+						newTerrain.genTerrain((defc), image,mag,random,biome);
 						Tera.add(newTerrain);
 						addTerrainToPhys(newTerrain);
 						if(tempT.size()<9){
@@ -255,7 +261,8 @@ public class TerrainManager implements VisibleObject{
 					loadChunksToVramAndPhys(terrainRenders);		
 				}				
 			}	
-		}		
+		}
+		return numGenerated;
 	}
 	/**
 	 * 
@@ -302,7 +309,7 @@ public class TerrainManager implements VisibleObject{
 		}
 	}
 
-	public void Initgen(int def,File imageA, File imageB,float noise){
+	public void Initgen(int def,File imageA, File imageB,float noise,Biome startBiome){
 
 		this.def = def;
 		defc = (int) (Math.pow(2, def)+1);
@@ -310,33 +317,22 @@ public class TerrainManager implements VisibleObject{
 		test=new float[defc];
 		for(int a=0;a<defc;a++)test[a]=(float)Math.random()*5;
 
-
 		try {
 			image = ImageIO.read(imageA);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			image2 = ImageIO.read(imageB);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-
-
-		//Terrain t = new Terrain(0,0, 1f );
 
 		final float sizefactor=100;//size magnitude of terrain	
 		float a = (float) (1/(defc));
 		mag = (sizefactor/(defc-1f));
 
-
-
-
-		//t.genTerrain((int)((Math.pow(2, def))+1),image);
 		System.out.println("mag"+mag);
-		//-----------------------------was going to add multiple chunks
 		int numofchunks=1;
 		int count = 0;
 		Terrain[] terrainRenders = new Terrain[9];
@@ -353,7 +349,7 @@ public class TerrainManager implements VisibleObject{
 				float[]bottom=new float[defc];
 				if(adj[3]!=-1)bottom=Tera.get(adj[3]).nright;
 				//		t.setSeed(top, left, right, bottom, true);
-				t.genTerrain(defc,image,mag);
+				t.genTerrain(defc,image,mag,random,startBiome);
 				Tera.add(t);
 				addTerrainToPhys(t);
 				t.id = count + "original";				
@@ -369,6 +365,7 @@ public class TerrainManager implements VisibleObject{
 		System.out.println("people");
 	}
 	public void render(){
+	//	GL11.glDisable(GL11.GL_LIGHTING);
 		if(!vboUpdated){ 
 			buildVBO();
 			vboUpdated = true;
@@ -385,9 +382,9 @@ public class TerrainManager implements VisibleObject{
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, texID);			
 		GL11.glTexCoordPointer(2, GL11.GL_FLOAT,0, 0L);
 
-		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normID);			
-		GL11.glNormalPointer(GL11.GL_FLOAT, 0,0);			
+	//	GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+	//	ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normID);			
+	//	GL11.glNormalPointer(GL11.GL_FLOAT, 0,0);			
 
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, defc*defc*6*renderAtATime);			
 

@@ -32,6 +32,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.vecmath.Vector3f;
 
@@ -93,6 +94,7 @@ public class Terrain{
 	public FloatBuffer vertPart;
 	public FloatBuffer texPart;
 	public FloatBuffer	normalPart;
+
 	public String id = "null";
 
 
@@ -147,39 +149,51 @@ public class Terrain{
 		multiplechunks=mult;
 	}
 	
-	public float[][] genTerrain(int def,BufferedImage image,float mag){
+	public float[][] genTerrain(int def,BufferedImage image,float mag,Random random,Biome biome){
 		this.image = image;
 		Chunk = new float[def][def];
 		defp= def;
-
+		biome.setRandom(random);
+		biome.setMag(mag);
+		
 		int histp = 0;
 		//int rem = a;
 		double height = 2;
 		//determines flatness of terrain
 		double spacing =0;
+	//	float maxHeight = biome.getMaxHeight();
+	//	float minHeight = biome.getMinHeight();
 		for(int a=0;a<Chunk.length;a++){
 			for (int b=0;b<Chunk.length;b++){
-				Chunk[a][b]=0f;	
+				Chunk[a][b]=0;	
 			}
 		}
 
-		Chunk[0][(Chunk.length-1)]= (float) (Math.random()*seed[1]);
-		Chunk[0][0]= (float) (Math.random()*seed[0]);
-		Chunk[(Chunk.length-1)][0]= (float) (Math.random()*seed[2]);
-		Chunk[Chunk.length-1][(Chunk.length-1)]= (float) (Math.random()*seed[3]);
+		Chunk[0][(Chunk.length-1)]= (float) (random.nextFloat()*seed[1]);
+		Chunk[0][0]= (float) (random.nextFloat()*seed[0]);
+		Chunk[(Chunk.length-1)][0]= (float) (random.nextFloat()*seed[2]);
+		Chunk[Chunk.length-1][(Chunk.length-1)]= (float) (random.nextFloat()*seed[3]);
 		if (multiplechunks){
 			for(int a=0;a<Chunk.length;a++){
-				if(top[a]!=0)Chunk[0][a]=top[a];
-			//	System.out.println("Top: " + top[a]);
+				if(top[a]!=0)
+					Chunk[0][a]=top[a];
+		//		else
+		//			Chunk[0][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
 			
-				if(bottom[a]!=0)Chunk[defp-1][a]=bottom[a];
-			//	System.out.println("Bot: " + bottom[a]);
+				if(bottom[a]!=0)
+					Chunk[defp-1][a]=bottom[a];
+			//	else
+			//		Chunk[defp-1][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
+				
+				if(left[a]!=0)
+					Chunk[a][0]=left[a];
+			//	else
+			//		Chunk[a][0] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
 
-				if(left[a]!=0)Chunk[a][0]=left[a];
-			//	System.out.println("Left: " + left[a]);
-
-				if(right[a]!=0)Chunk[a][defp-1]=right[a];
-				//System.out.println("Right: " + right[a]);
+				if(right[a]!=0)
+					Chunk[a][defp-1]=right[a];
+			//	else
+			//		Chunk[a][defp-1] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
 			}
 		}
 
@@ -191,6 +205,7 @@ public class Terrain{
 			//int div2 = (int) Math.pow(2, b);
 			for(int x=0;x<Chunk.length-a;x+=a){
 				for(int y=0;y<Chunk.length-a;y+=a){
+					noise = biome.getNoise(x,y);
 					//if (x==0) avg=Chunk[x][y+half]+Chunk[x+half][y+half]+Chunk[x+half][y-half]+Chunk[x][y-half];
 					//else if (y==0) avg=Chunk[x-half][y+half]+Chunk[x+half][y+half]+Chunk[x+half][y]+Chunk[x-half][y];
 					//else if (y==256)avg=Chunk[x-half][y]+Chunk[x+half][y]+Chunk[x+half][y-half]+Chunk[x-half][y-half];
@@ -205,24 +220,27 @@ public class Terrain{
 					avg=(Chunk[x][y]+Chunk[x+a][y]+Chunk[x+a][y+a]+Chunk[x][y+a])/4;
 					float pd=(noise/2);
 					float ab = (float) (Math.sqrt(a/2));
-					float av2=(float)(avg+(((Math.random()*noise)-pd)*(half/2)));
+					float av2=(float)(avg+(((random.nextFloat()*noise)-pd)*(half/2)));
 					if(Chunk[x+half][y+half]==0)Chunk[x+half][y+half]=av2;
 					avg=(Chunk[x][y]+Chunk[x+a][y]+Chunk[x+a][y+a]+Chunk[x][y+a]+Chunk[x+half][y+half])/5;
 
 					avg=(Chunk[x+a][y]+Chunk[x][y]+Chunk[x+half][y+half])/3;
-					av2=(float)(avg+(((Math.random()*noise)-pd)*(half/2)));
-					if(Chunk[x+half][y]==0)Chunk[x+half][y]=av2;//(float) ( (((Math.random()*(avg*ab)/noise)-pd))/smoothingfactor);
+					av2=(float)(avg+(((random.nextFloat()*noise)-pd)*(half/2)));
+					if(Chunk[x+half][y]==0)Chunk[x+half][y]=av2;//(float) ( (((random.nextFloat()*(avg*ab)/noise)-pd))/smoothingfactor);
 					avg=(Chunk[x][y+a]+Chunk[x][y]+Chunk[x+half][y+half])/3;
-					av2=(float)(avg+(((Math.random()*noise)-pd)*(half/2)));					
-					if(Chunk[x][y+half]==0)Chunk[x][y+half]=av2;//(float) ( (((Math.random()*(avg*ab)/noise)-pd))/smoothingfactor);
+					av2=(float)(avg+(((random.nextFloat()*noise)-pd)*(half/2)));					
+					if(Chunk[x][y+half]==0)Chunk[x][y+half]=av2;//(float) ( (((random.nextFloat()*(avg*ab)/noise)-pd))/smoothingfactor);
 					avg=(Chunk[x][y+a]+Chunk[x+a][y+a]+Chunk[x+half][y+half])/3;
-					av2=(float)(avg+(((Math.random()*noise)-pd)*(half/2)));
-					if(Chunk[x+half][y+a]==0)Chunk[x+half][y+a]=av2;//(float) ((((Math.random()*(avg*ab)/noise)-pd))/smoothingfactor);
+					av2=(float)(avg+(((random.nextFloat()*noise)-pd)*(half/2)));
+					if(Chunk[x+half][y+a]==0)Chunk[x+half][y+a]=av2;//(float) ((((random.nextFloat()*(avg*ab)/noise)-pd))/smoothingfactor);
 					avg=(Chunk[x+a][y]+Chunk[x+a][y+a]+Chunk[x+half][y+half])/3;
-					av2=(float)(avg+(((Math.random()*noise)-pd)*(half/2)));
-					if(Chunk[x+a][y+half]==0)Chunk[x+a][y+half]=av2;///avg(float) ((((Math.random()*(avg*ab)/noise)-pd))/smoothingfactor);
+					av2=(float)(avg+(((random.nextFloat()*noise)-pd)*(half/2)));
+					if(Chunk[x+a][y+half]==0)Chunk[x+a][y+half]=av2;///avg(float) ((((random.nextFloat()*(avg*ab)/noise)-pd))/smoothingfactor);
 				}
 			}
+		}
+		for(int i=0;i<biome.getSmoothTimes();i++){
+			Chunk = smooth(Chunk);
 		}
 		ntop=new float[defp];
 		nbottom=new float[defp];
@@ -338,61 +356,40 @@ public class Terrain{
 			}
 		}
 		texPart.rewind();
-		normalPart = BufferUtils.createFloatBuffer(Chunk.length*Chunk.length*18);
-		for (int f=0;f<Chunk.length-1;f++){
-			for (int g=0;g<Chunk.length-1;g++){
-				//Possible bug with crossing vectors
-				float temp=Chunk[f][g]-Chunk[f+1][g];
-				Vector3f v1 = new Vector3f(1,temp,0);
-				temp=Chunk[f][g]-Chunk[f][g+1];
-				Vector3f v2 = new Vector3f(0,temp,1);
-				Vector3f v3 = new Vector3f();
-				v3.cross(v1,v2);
-				normalPart.put(Utils.asFloatBuffer(v3));
-
-				temp=Chunk[f+1][g]-Chunk[f][g];
-				v1 = new Vector3f(1,temp,0);
-				temp=Chunk[f+1][g]-Chunk[f][g+1];
-				v2 = new Vector3f(1,temp,1);
-				v3 = new Vector3f();
-				v3.cross(v1,v2);
-				normalPart.put(Utils.asFloatBuffer(v3));
-
-				temp=Chunk[f][g+1]-Chunk[f+1][g];
-				v1 = new Vector3f(1,temp,1);
-				temp=Chunk[f][g+1]-Chunk[f][g];
-				v2 = new Vector3f(0,temp,1);
-				v3 = new Vector3f();
-				v3.cross(v1,v2);
-				normalPart.put(Utils.asFloatBuffer(v3));
-
-				//----------------------------------------------
-
-				temp=Chunk[f+1][g+1]-Chunk[f+1][g];
-				Vector3f v12 = new Vector3f(0,temp,1);
-				temp=Chunk[f+1][g+1]-Chunk[f][g+1];
-				Vector3f v22 = new Vector3f(1,temp,0);
-				v3 = new Vector3f();
-				v3.cross(v12,v22);
-				normalPart.put(Utils.asFloatBuffer(v3));
-
-				temp=Chunk[f][g+1]-Chunk[f+1][g];
-				v12 = new Vector3f(1,temp,1);
-				temp=Chunk[f][g+1]-Chunk[f+1][g+1];
-				v22 = new Vector3f(1,temp,0);
-				v3 = new Vector3f();
-				v3.cross(v12,v22);
-				normalPart.put(Utils.asFloatBuffer(v3));
-
-				temp=Chunk[f][g+1]-Chunk[f+1][g+1];
-				v12 = new Vector3f(1,temp,0);
-				temp=Chunk[f][g+1]-Chunk[f+1][g];
-				v22 = new Vector3f(1,temp,1);
-				v3 = new Vector3f();
-				v3.cross(v12,v22);
-				normalPart.put(Utils.asFloatBuffer(v3));
+		normalPart = BufferUtils.createFloatBuffer(Chunk.length*Chunk.length*6*3);
+		
+		for (int a=0;a<Chunk.length-1;a++){
+			for (int b=0;b<Chunk.length-1;b++){
+				Vector3f p1 =new Vector3f(a + startx,Chunk[a][b],b + starty);				
+				Vector3f p2 =new Vector3f(a + 1 + startx,Chunk[a+1][b],b + starty);
+				Vector3f p3 =new Vector3f(a + startx,Chunk[a][b+1],b + 1 + starty);
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				//----------------------------------
+				p1 = new Vector3f(a + 1 + startx,Chunk[a+1][b+1],b + starty + 1);
+				p2 = new Vector3f(a + 1 + startx,Chunk[a+1][b],b + starty);
+				p3 = new Vector3f(a + startx,Chunk[a][b+1],b + starty + 1);
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
 			}
+		} 
+		/*
+		for(int i=0;i<points.length;i+=3){
+			if(i >= points.length-3){
+				Vector3f current = new Vector3f(points[i],points[i+1],points[i+2]);
+				Vector3f next = new Vector3f(points[i-3],points[i-2],points[i-1]);
+				Vector3f normal = new Vector3f();
+				normal.x = (current.y*next.z) - (current.z*current.y);
+				normal.y = (current.z*next.x) - (current.x*current.z);
+				normal.z = (current.x*next.y) - (current.y*current.x);
+				normalPart.put(Utils.asFloatBuffer(normal));				
+			}else{
+			
 		}
+			*/
+		// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
 		normalPart.rewind();
 	
 		TriangleIndexVertexArray tiva = new TriangleIndexVertexArray(points.length/9, indes, 3*4, points.length/3, verts, 4*3);
@@ -404,6 +401,58 @@ public class Terrain{
 		collisionShape = tms;
 		return Chunk;
 	}
+	Vector3f calcTriNorm(Vector3f p1, Vector3f p2, Vector3f p3){		
+		p2.sub(p1);
+		p3.sub(p1);
+		Vector3f U = p2;
+		Vector3f V = p3;
+		Vector3f normal = new Vector3f();
+	//	normal.x = (U.y*V.z) - (U.z*U.y);
+	//	normal.y = (U.z*V.x) - (U.x*U.z);
+	//	normal.z = (U.x*V.y) - (U.y*U.x);
+		normal.cross(V, U);
+		return normal;		
+	}
+	
+	public float[][] smooth(float[][] Chunk){
+		  for(int a=1;a<Chunk.length-1;a++){
+		   for(int b=1;b<Chunk.length-1;b++){
+		    float avg = Chunk[a][b];
+		    if(a>0){
+		     if(a<Chunk.length-1){
+		      if(b>0){
+		       if(b<Chunk.length-1){
+		        avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/4;
+		       }
+		       else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1])/3;
+		      }
+		      else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b+1])/3;
+		     }
+		     else if(b>0){
+		      if(b<Chunk.length-1){
+		       avg = (Chunk[a-1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
+		      }
+		      else avg = (Chunk[a-1][b]+Chunk[a][b-1])/2;
+		     }
+		     else avg = (Chunk[a][b+1]+Chunk[a-1][b])/3;
+		     
+		    }
+		    else if(b>0){
+		     if(b<Chunk.length-1){
+		      avg = (Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
+		     }
+		     else avg = (Chunk[a+1][b]+Chunk[a][b-1])/2;
+		    }
+		    else avg = (Chunk[a+1][b]+Chunk[a][b+1])/3;
+		    
+		    float dif = avg-Chunk[a][b];
+		    Chunk[a][b]+=dif;
+		   } 
+		  }
+		  
+		  return Chunk;
+		 }
+	
 
 	public CollisionShape getCollisionShape(){
 		return collisionShape;
