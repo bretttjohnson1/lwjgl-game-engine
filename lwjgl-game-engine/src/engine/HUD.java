@@ -153,5 +153,11 @@ public class HUD implements Runnable{
 	//	glEnable(GL_CULL_FACE);
 		glPopMatrix();
 	}
+	public int getWidth(){
+		return width;
+	}
+	public int getHeight(){
+		return height;
+	}
 
 }

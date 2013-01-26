@@ -5,6 +5,7 @@ import java.awt.Canvas;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 public class BasicGame {
@@ -19,6 +20,7 @@ public class BasicGame {
 	public Thread rendert;
 	int w;
 	int h;
+	DisplayMode dm;
 	Vector3f worldMax, worldMin;
 	Canvas canvas;
 	
@@ -28,20 +30,23 @@ public class BasicGame {
 		h = height;
 		this.canvas = canvas;
 	}
-	
-	public void initGameObjects(Phys phys){
+	public BasicGame(DisplayMode dm,Canvas canvas){
+		this.dm = dm;
+		this.canvas = canvas;
+		game = this;
+	}
+	public void initGameObjects(){
 		camera = new Camera();
-		world = new World(camera,phys);
+		world = new World(camera);
 		world.setupPhysics();
-		render = new Render(world,w,h,canvas);
+		if(dm != null){
+			render = new Render(world,dm,canvas);
+		}else{
+			render = new Render(world,w,h,canvas);
+		}
 		rendert = new Thread(render,"Render");
 		isRunning = true;			
 	}
-	
-	
-//	public static int genDispList(int range){
-//		return GL11.glGenLists(range);
-//	}
 	
 	public void preInit(){}
 
@@ -52,8 +57,6 @@ public class BasicGame {
 	public void tick(){}
 	
 	public void nonPauseTick(){}
-	
-	public void physTick(){};
 	
 	public void setGravity(Vector3f gravity){
 		world.setGravity(gravity);

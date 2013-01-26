@@ -305,7 +305,7 @@ public class TerrainManager implements VisibleObject{
 		if(phys){
 			RigidBodyConstructionInfo rbci = new RigidBodyConstructionInfo(0,new DefaultMotionState(),t.collisionShape);
 			RigidBody rigidBody = new RigidBody(rbci);
-			world.phys.needToBeAdded.add(rigidBody);
+			world.physWorld.addRigidBody(rigidBody);
 		}
 	}
 
@@ -371,6 +371,7 @@ public class TerrainManager implements VisibleObject{
 			vboUpdated = true;
 			textureID =	loadTexture(image);
 		}
+		if(vertID == 0) return;
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		GL11.glColor3f(255,0, 0);

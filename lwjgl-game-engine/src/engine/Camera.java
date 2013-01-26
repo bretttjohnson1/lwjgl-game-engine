@@ -13,5 +13,14 @@ public class Camera {
 	public Vector3f rotAsVecotr3f(){
 		return new Vector3f((float) rotx,(float) roty,(float) rotz);
 	}
+	
+	
+	public Vector3f camRotAsTrueVector(){
+		Vector3f out = new Vector3f();
+		out.x = (float) Math.sin(roty*Utils.FACTOR_DEG_TO_RAD);
+		out.y = (float) Math.tan(-rotx*Utils.FACTOR_DEG_TO_RAD);
+		out.z = (float) -Math.cos(roty*Utils.FACTOR_DEG_TO_RAD);
+		return out;
+	}
 }
 

@@ -36,8 +36,8 @@ public class Player {
 	public int maxWeight = 1000;
 	EntityLightFlashLight flashLight;
 	Camera camera;
-	
-	
+	PlayerHUD hud;
+
 	public Player(Level level, double speed, double runFactor, float jumpForce,Camera camera){
 		world = level.renderWorld;
 		this.level = level;
@@ -45,24 +45,20 @@ public class Player {
 		this.runFactor = runFactor;
 		this.jumpForce = jumpForce;
 		mobControler = new MobControler(new CapsuleShape(1,3f),world,20);
-		//Mouse.setGrabbed(true);
 		mobControler.warp(new Vector3f(0,0,0));
 		inventory = new Inventory(maxWeight);
 		flashLight = new EntityLightFlashLight(level);		
 		level.addEntity(flashLight);
 		this.camera = camera;
 		level.setPlayer(this);
+		hud = new PlayerHUD(this,640/480);
 	}
-	
+
 	float roty;
 	float rotx;
 	boolean gPressed = false;
-	//float protx;
-	//float proty;
-	
+
 	public void tick(){		
-		//proty = (float) camera.roty;
-		//protx = (float) camera.rotx;
 		camera.rotx -= ((double) Mouse.getDY())/4;
 		camera.roty += ((double) Mouse.getDX())/4;		
 		boolean moving = false;
@@ -71,16 +67,15 @@ public class Player {
 		}else{
 			camera.rotx = rotx;
 		}
-			roty = (float) camera.roty;
+		roty = (float) camera.roty;
 		speed = oSpeed;
 		Vector3f loc = camera.locAsVecotr3f();
-//		loc.negate();
+		//		loc.negate();
 		flashLight.setLocation(loc);		
-		Vector3f dir = new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD)));
-		flashLight.setDirection(dir);
-		
+		flashLight.setDirection(camera.camRotAsTrueVector());
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) speed *=runFactor;
-		
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
 			mobControler.jump(jumpForce);
 		}		
@@ -106,17 +101,23 @@ public class Player {
 			moving = true;
 		}	
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-		//	Vector3f newLoc = mobControler.getLocation().asVector3f();
-		//	newLoc.y += 10;
-		//	mobControler.warp(newLoc);
+			//	Vector3f newLoc = mobControler.getLocation().asVector3f();
+			//	newLoc.y += 10;
+			//	mobControler.warp(newLoc);
 			mobControler.jumpNOCheck(100);
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 			//	Vector3f newLoc = mobControler.getLocation().asVector3f();
 			//	newLoc.y += 10;
 			//	mobControler.warp(newLoc);
-				mobControler.jumpNOCheck(-100);
+			mobControler.jumpNOCheck(-100);
+		}
+		if(Mouse.isButtonDown(0)) {
+			if(item != null) {
+				//		System.out.println(rotx);
+				item.use(camera.camRotAsTrueVector(), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
 			}
+		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_G)){
 			if(!gPressed){
 				gPressed = true;
@@ -131,12 +132,12 @@ public class Player {
 		}else{
 			gPressed = false;
 		}
-			
+
 		if(!moving){
 			mobControler.moveXZ(new Vector2f(0,0));
 		}
-		
-		
+
+
 		Point3d mLoc = mobControler.getLocation();
 		camera.x = mLoc.x;
 		camera.y = mLoc.y-1;
@@ -146,16 +147,8 @@ public class Player {
 			item.tick();
 		}
 	}
-	
-	public void physTick(){
-		if(Mouse.isButtonDown(0)) {
-			if(item != null) {
-		//		System.out.println(rotx);
-				item.use(new Vector3f((float) (Math.sin(roty*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.sin(rotx*Utils.FACTOR_DEG_TO_RAD)),(float) (-Math.cos(roty*Utils.FACTOR_DEG_TO_RAD))), camera.locAsVecotr3f(), camera.rotAsVecotr3f());
-			}
-		}
-	}
-	
+
+
 	public void equip(Item item){
 		if(this.item != null) world.removeVisibleHUDObject(this.item.model);
 		this.item = item;
@@ -176,5 +169,4 @@ public class Player {
 	public void setLocation(Point3d newLoc){
 		mobControler.warp(newLoc.asVector3f());
 	}
-	
 }

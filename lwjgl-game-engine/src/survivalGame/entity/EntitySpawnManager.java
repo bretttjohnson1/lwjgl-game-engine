@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import survivalGame.Level;
 
 public class EntitySpawnManager {
-	ArrayList<SpawnedEntity>  spawnedEntitys= new ArrayList<SpawnedEntity>();
+	private ArrayList<SpawnedEntity>  spawnedEntitys= new ArrayList<SpawnedEntity>();
+	ArrayList<Entity> entitiesToBeRemoved = new ArrayList<Entity>();
 	Level l;
 	
 	public EntitySpawnManager(Level l){
@@ -18,7 +19,18 @@ public class EntitySpawnManager {
 		SpawnedEntity s = spawnedEntitys.get(i);
 			if(s.oneSecondTick()){
 				l.removeEntity(s.e);
-				spawnedEntitys.remove(s);
+				despawnEntity(s.e);
+			}
+		}
+		for(int i =0;i<entitiesToBeRemoved.size();i++){
+			Entity e = entitiesToBeRemoved.get(i);
+			for(int i2=0;i2< spawnedEntitys.size();i2++){
+				SpawnedEntity s = spawnedEntitys.get(i2);
+				if(s.e == e){
+					l.removeEntity(e);
+					spawnedEntitys.remove(s);
+					entitiesToBeRemoved.remove(e);
+				}
 			}
 		}
 	}
@@ -30,12 +42,7 @@ public class EntitySpawnManager {
 	} 
 	
 	public void despawnEntity(Entity e){
-		for(SpawnedEntity s : spawnedEntitys){
-			if(s.e == e){
-				l.removeEntity(e);
-				spawnedEntitys.remove(s);
-			}
-		}
+		entitiesToBeRemoved.add(e);
 	}
 }
 

@@ -107,10 +107,45 @@ public class Model implements VisibleObject, Serializable{
 		readyToWrite = true;
 		
 	}
+	@Override
 	public void removeFromPhysWorld(){
 		if(rb!=null)
-		world.phys.needToBeRemoved.add(rb);
+		world.removeRigidBody(rb);
 	}
+	public SpecialRigidBody addToPhysWorldSRB(CollisionShape cs,float mass,Object object, String name, CollisionListener cl){
+		if(mass == 0){
+			this.mass = mass;
+			collisonShape = cs;
+			dynamic = false;
+			Transform t = new Transform();
+			t.setIdentity();
+			t.origin.set((float)location.x,(float)location.y,(float)location.z);
+			MotionState ms = new DefaultMotionState(t);
+			RigidBodyConstructionInfo rbci = null;	
+			rbci = new RigidBodyConstructionInfo(mass, ms, cs);		
+			rb = new SpecialRigidBody(rbci, object, name, cl);
+			if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
+			world.physWorld.addRigidBody(rb);
+		}else{	
+			this.mass = mass;
+			collisonShape = cs;
+			dynamic = true;
+			Transform t2 = new Transform();
+			t2.setIdentity();
+			t2.origin.set(0,0,0);			
+			Vector3f inertia = new Vector3f();
+			cs.calculateLocalInertia(mass, inertia);
+			MotionState ms = new DefaultMotionState(t2);
+			RigidBodyConstructionInfo rbci = null;	
+			rbci = new RigidBodyConstructionInfo(mass, ms, cs,inertia);		
+			rb = new SpecialRigidBody(rbci, object, name, cl);
+			if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
+			world.physWorld.addRigidBody(rb);
+		}
+		return (SpecialRigidBody) rb;
+	}
+
+	
 	public void addToPhysWorld(CollisionShape cs,float mass){
 		if(mass == 0){
 			this.mass = mass;
@@ -139,7 +174,7 @@ public class Model implements VisibleObject, Serializable{
 			rbci = new RigidBodyConstructionInfo(mass, ms, cs,inertia);		
 			rb = new RigidBody(rbci);
 			if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
-			world.phys.needToBeAdded.add(rb);
+			world.physWorld.addRigidBody(rb);
 		}
 	}
 
@@ -187,8 +222,7 @@ public class Model implements VisibleObject, Serializable{
 		rbci = new RigidBodyConstructionInfo(mass, ms, cs);		
 		rb = new RigidBody(rbci);
 		if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
-		world.phys.needToBeAdded.add(rb);
-
+		world.physWorld.addRigidBody(rb);
 	}
 	public void addToPhysWorldBVH(float mass){		
 		this.mass = mass;
@@ -234,7 +268,7 @@ public class Model implements VisibleObject, Serializable{
 		rbci = new RigidBodyConstructionInfo(mass, ms, cs);		
 		rb = new RigidBody(rbci);
 		if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
-		world.phys.needToBeAdded.add(rb);
+		world.physWorld.addRigidBody(rb);
 
 	}
 	public void addToPhysWorld(float mass){
@@ -259,7 +293,7 @@ public class Model implements VisibleObject, Serializable{
 		rbci = new RigidBodyConstructionInfo(mass, ms, cs,inertia);		
 		rb = new RigidBody(rbci);
 		if(world == null) new RuntimeException("Add to render world first befor adding to phys world");		
-		world.phys.needToBeAdded.add(rb);
+		world.physWorld.addRigidBody(rb);
 	}
 
 	public void move(Point3d newLocation){
@@ -313,7 +347,7 @@ public class Model implements VisibleObject, Serializable{
 			System.out.println("things");
 			return;
 		}
-		
+		if(image == null) return;
 		int il = image.getWidth()*image.getHeight();		
 		//	Graphics2D g = image.createGraphics();
 		//	g.rotate(Math.toRadians(180), image.getHeight()/2, image.getWidth()/2);
@@ -601,9 +635,6 @@ public class Model implements VisibleObject, Serializable{
 		m.built = true;
 		m.faces = faces;
 		m.name = name;
-		//if(world != null){
-		//	world.addObject(m);
-		//}
 		if(dynamic){		
 			m.dynamic = true;
 			m.addToPhysWorld(collisonShape, mass);
@@ -619,7 +650,7 @@ public class Model implements VisibleObject, Serializable{
 
 	@Override
 	public void removedFromWorld() {
-		if(rb != null) world.physWorld.removeRigidBody(rb);
+		if(rb != null) world.removeRigidBody(rb);
 	}
 	@Override
 	public String getName() {

@@ -46,6 +46,7 @@ public class VisibleObjectHandler {
 	public static void load(String path, World w, boolean animatedModels) throws FileNotFoundException, IOException, ClassNotFoundException{
 		File f = new File(path);
 		File[] files = f.listFiles();
+		if(files == null) return;
 		if(animatedModels){
 			for(int i=0;i<files.length;i++){				
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));

@@ -21,7 +21,7 @@ public class SpotLight extends Light{
 		super.enable();
 		GL11.glLightf(lightID, GL11.GL_SPOT_CUTOFF, cutoff);
 		GL11.glLight(lightID, GL11.GL_SPOT_DIRECTION, Utils.asFloatBuffer(new Vector4f(dir.x,dir.y,dir.z,0)));
-	//	GL11.glLight(lightID, GL11.GL_SPOT_EXPONENT, p)
+		//GL11.glLightf(lightID, GL11.GL_SPOT_EXPONENT, -10);
 	}
 
 

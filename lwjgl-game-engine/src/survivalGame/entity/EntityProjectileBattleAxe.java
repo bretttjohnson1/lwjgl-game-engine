@@ -16,7 +16,7 @@ public class EntityProjectileBattleAxe extends EntityProjectile{
 		super(VisibleObjectHandler.getVisableObject("Battle_Axe"), level);
 		damage = 5;
 		initVel = 50;
-		life = 10000;
+		life = 1000;
 	}
 
 	@Override
@@ -29,8 +29,8 @@ public class EntityProjectileBattleAxe extends EntityProjectile{
 		level.esm.spawnEntity(this, life);
 		rendarbleObject.setVisible(true);
 		projectileModel.addToPhysWorld(new BoxShape(new Vector3f(.5f,.5f,10)),3f);
-		projectileModel.move(new Point3d((-dir.x*1.5 + location.x),dir.y + location.y,-dir.z*1.5 + location.z));
+		projectileModel.move(new Point3d((dir.x*3 + location.x),dir.y*3 + location.y,dir.z*3 + location.z));
 		projectileModel.rot(0, -rot.y, 0);
-		projectileModel.rb.applyForce(new Vector3f(-dir.x*initVel,dir.y*initVel,-dir.z*initVel), new Vector3f(0,0,0));
-	}
+		projectileModel.rb.applyForce(new Vector3f(dir.x*initVel,dir.y*initVel,dir.z*initVel), new Vector3f(0,0,0));
+	}	
 }

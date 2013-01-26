@@ -9,7 +9,7 @@ public class EntityProjectileBullet extends EntityProjectile{
 		super(VisibleObjectHandler.getVisableObject("Entity_Projectile_Bullet"), level);
 		//	super(VisibleObjectHandler.getVisableObject("Battle_Axe"), level);
 		damage = 5;
-		initVel = 50;
+		initVel = 500;	
 	}
 	@Override
 	public EntityProjectile duplicate() {

@@ -10,6 +10,7 @@ public class WeaponBattleAxeGun extends WeaponRange{
 	public WeaponBattleAxeGun(Level level) {
 		super((Model) VisibleObjectHandler.getVisableObject("Test_Gun_01"), level);
 		projectile = new EntityProjectileBattleAxe(level);
-		ticksPerFire = 100;		
+		ticksPerFire = 0;		
+		name = "Debug Axe of Lag";
 	}
 }

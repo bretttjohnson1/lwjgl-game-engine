@@ -49,7 +49,6 @@ public class Utils {
 		TEuler.x *= f;
 		TEuler.y *= f;
 		TEuler.z *= f;
-		
 	}
 	public static Point3d vector3fToPoint3d(Vector3f v){
 		Point3d p = new Point3d(v.x,v.y,v.z);

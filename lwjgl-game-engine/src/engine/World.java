@@ -46,9 +46,9 @@ public class World {
 	public ArrayList<Light> lights = new ArrayList<Light>();
 	private ArrayList<Shader> shaders = new ArrayList<Shader>();
 	public ArrayList<VisibleObject> visibleHUDObject = new ArrayList<VisibleObject>();
+	ArrayList<RigidBody> rigidBodysToBeRemoved = new ArrayList<RigidBody>(); 
 	HUD hud = null;
 	Menu currentMenu = null;
-	
 	public DynamicsWorld physWorld;
 	public CollisionConfiguration colCon;
 	public CollisionDispatcher colDisp;
@@ -60,14 +60,11 @@ public class World {
 	Vector3f worldMax, worldMin;
 	public int renderTickNumber  = 0;
 	public boolean ready = false;
-	Phys phys;
 	//public AxisSweep3 sweep3;
 	
 	Camera camera;	
-	public World(Camera camera, Phys phys){
+	public World(Camera camera){
 		this.camera = camera;
-		this.phys = phys;
-		//sweep3 = new AxisSweep3(worldMin, worldMax);
 		setupPhysics();
 		ready = true;
 	}
@@ -126,6 +123,8 @@ public class World {
 		physWorld = new DiscreteDynamicsWorld(colDisp,bI,sics,colCon);
 //		physWorld.getPairCache().setInternalGhostPairCallback(gpc);
 		physWorld.setGravity(gravity);
+		physWorld.setInternalTickCallback(new ITCB(), null);
+		
 	//	physWorld.setDebugDrawer(new JBulletDebug());
 	}
 		
@@ -136,6 +135,10 @@ public class World {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+		for(int i=0;i<rigidBodysToBeRemoved.size();i++){
+			physWorld.removeRigidBody(rigidBodysToBeRemoved.get(i));
+			rigidBodysToBeRemoved.remove(i);
 		}
 	}
 	public void addVisisbleHUDObject(VisibleObject v){
@@ -152,6 +155,10 @@ public class World {
 				visibleHUDObject.remove(i);
 			}
 		}
+	}
+	
+	public void removeRigidBody(RigidBody rb){
+		rigidBodysToBeRemoved.add(rb);
 	}
 	
 	public void render(){	
@@ -199,7 +206,6 @@ public class World {
 				lights.get(i).enable();
 			}
 		}
-	//	physWorld.debugDrawWorld();
 		GL11.glPopMatrix();
 		
 		GL11.glDisable(GL_DEPTH_TEST);
@@ -212,9 +218,7 @@ public class World {
 		}
 		GL11.glEnable(GL_DEPTH_TEST);
 	}
-	public void cleanUp() {
-		
-	}
+	public void cleanUp() {}
 	
 	public Menu getCurrentMenu(){
 		return currentMenu;

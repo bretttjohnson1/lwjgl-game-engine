@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.DisplayMode;
 
 import survivalGame.entity.EntityItem;
 import survivalGame.entity.EntityPlayer;
@@ -37,8 +38,8 @@ import engine.World;
 
 public class SurvivalGame extends BasicGame {
 
-	double speed = 3;
-	double runFactor = 2;
+	double speed = 6;
+	double runFactor = 10;
 	float jumpForce = 300;
 	static GameManager gm;
 	Player player;
@@ -46,10 +47,11 @@ public class SurvivalGame extends BasicGame {
 	Level level;	
 	WeaponRange[] weapons = new WeaponRange[2];
 	Object test = null;
-	HUD headsUpDisplay = null;
-	HUDString fps = new HUDString("FPS: 0", 0, 0);
-	HUDString tps = new HUDString("TPS: 0", 300, 0);
-	HUDString ptps = new HUDString("PTPS: 0", 600, 0);
+	boolean fScreen = false;
+//	HUD headsUpDisplay = null;
+//	HUDString fps = new HUDString("FPS: 0", 0, 0);
+//	HUDString tps = new HUDString("TPS: 0", 300, 0);
+//	HUDString ptps = new HUDString("PTPS: 0", 600, 0);
 	Random random;
 	public static void main(String[] args) {
 		gm = new GameManager();
@@ -60,6 +62,11 @@ public class SurvivalGame extends BasicGame {
 		super(width, height, canvas);
 		random = new Random();
 	}
+	public SurvivalGame(DisplayMode dm, Canvas canvas, boolean fullScreen) {
+		super(dm, canvas);
+		random = new Random();
+		fScreen = fullScreen;
+	}
 	
 	@Override
 	public void preInit() {
@@ -67,7 +74,7 @@ public class SurvivalGame extends BasicGame {
 		level = new Level(world);
 		player = new Player(level, speed, runFactor, jumpForce,camera);
 		entityPlayer = new EntityPlayer(null, level, player);
-		setGravity(new Vector3f(0,-9.8f,0));
+		setGravity(new Vector3f(0,-98f,0));
 		gm.grabMouse = true;
 		try {
 			VisibleObjectHandler.load("SurvivalGame/Models",world,false);
@@ -89,14 +96,15 @@ public class SurvivalGame extends BasicGame {
 	
 	@Override
 	public void postInit() {
+		render.setFullScreen(fScreen);
 		ObjectTerrain terrain = new ObjectTerrain(player, new File("res/dirt.bmp"),new File("res/dirt.bmp"),random);
 		level.addObject(terrain);		
 		terrain.addToPhys();		
-		headsUpDisplay = new HUD((float)Render.width/(float)Render.height);
-		headsUpDisplay.addElement(fps);
-		headsUpDisplay.addElement(tps);
-		headsUpDisplay.addElement(ptps);
-		world.setHUD(headsUpDisplay);
+	//	headsUpDisplay = new HUD((float)Render.width/(float)Render.height);
+	//	headsUpDisplay.addElement(fps);
+	//	headsUpDisplay.addElement(tps);
+	//	headsUpDisplay.addElement(ptps);
+	//	world.setHUD(headsUpDisplay);
 		WeaponAK47 ak47 = new WeaponAK47(level);
 		WeaponPistol pistol = new WeaponPistol(level);
 		Weapon gun = new WeaponBattleAxeGun(level);
@@ -117,9 +125,9 @@ public class SurvivalGame extends BasicGame {
 	@Override
 	public void tick() {
 		if(!Keyboard.isCreated()) return;
-		fps.changeString("FPS: " + render.fps);
-		tps.changeString("TPS: " + gm.tps);
-		ptps.changeString("PTPS: " + GameManager.ptps);
+	//	fps.changeString("FPS: " + render.fps);
+	//	tps.changeString("TPS: " + gm.tps);
+	//	ptps.changeString("PTPS: " + GameManager.ptps);
 		player.tick();
 	    level.tick();	
 		if(Keyboard.isKeyDown(Keyboard.KEY_F) && !tPressed){
@@ -127,7 +135,7 @@ public class SurvivalGame extends BasicGame {
 			render.wireFrame = !render.wireFrame;
 		}else if(!Keyboard.isKeyDown(Keyboard.KEY_F)){
 			tPressed = false;
-		}		
+		}
 	}
 	boolean tabPressed = false;
 	@Override
@@ -157,9 +165,5 @@ public class SurvivalGame extends BasicGame {
 		if(!Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 			ePressed = false;
 		}
-	}
-	@Override
-	public void physTick() {
-		player.physTick();
 	}
 }

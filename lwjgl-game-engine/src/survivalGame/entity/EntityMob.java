@@ -22,12 +22,13 @@ public class EntityMob extends Entity {
 	
 	MobControler controler;
 	MobAI mobAI;
-	int health;
+	float health;
 	int maxHealth;
+	int defence = 0;
 	AnimationPlayer ap;
 	int walkingAnimation = 0;
 	
-	public int getHealth(){
+	public float getHealth(){
 		return health;
 	}
 	public int getMaxHealth(){
@@ -62,6 +63,21 @@ public class EntityMob extends Entity {
 	}
 	public void equip(Item item){
 		//TODO: Write general equip code
+	}
+	public void kill(){
+		//TODO: death animation here and despawn
+		dropItem();
+	}
+	public void dropItem(){
+		
+	}
+	public void damage(float damage){
+		if(damage > defence){
+			health -= (damage - defence);			
+		}
+		if(health <= 0){
+			kill();
+		}
 	}
 	
 }

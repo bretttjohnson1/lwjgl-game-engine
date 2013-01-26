@@ -2,6 +2,7 @@
 package survivalGame.object;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -23,9 +24,12 @@ public class ObjectTerrain extends Object{
 	int chunkCount = 0;
 	Biome biome = new BiomeSpawn();
 	Biome[] biomeTypes = new Biome[3];
-	int[] chance = new int[biomeTypes.length];
-	Biome[] biomeorder = new Biome[biomeTypes.length*20];
+	float[] chance = new float[biomeTypes.length];
+	//Need to save this to file to preserve seed!
+	ArrayList<Biome> biomeorder = new ArrayList<Biome>();
+	int max = 40;
 	Random random;
+	int place = -1;
 	
 	public ObjectTerrain(Player player,File imageA,File imageB, Random random) {
 		super(new TerrainManager(random));
@@ -34,6 +38,8 @@ public class ObjectTerrain extends Object{
 		this.imageA = imageA;
 		this.imageB = imageB;
 		this.random = random;
+		fillBiomeTypes();
+		genBiomeOrder();		
 	}
 	Point3d locA;
 	public void tick(){
@@ -43,29 +49,36 @@ public class ObjectTerrain extends Object{
 			locA = player.getLocation();
 			inited = true;
 		}
-		if(chunkCount >= 15) biome = new BiomeDesert();
+		if(chunkCount >= 15) biome = chooseBiome();
 		Point3d locB = player.getLocation();
 		if(Math.sqrt(Math.pow(locA.x-locB.x,2) +  Math.pow(locA.y-locB.y,2) + Math.pow(locA.z-locB.z,2)) > 30);{
 			chunkCount += manager.update((float)-locB.x,(float) -locB.z,biome);
 			locA = player.getLocation();			
 		}		
 	}
-	void genBiomeOrder(){
-		int max = biomeTypes.length;
-		for(int i=0;i<max;i++){
-			int num = random.nextInt(20);
-			for(int i2=0;i2<biomeTypes.length;i2++){
-				
-			}
-		}
-	}
-	public void fillBiomeTypes(){
+	void fillBiomeTypes(){
 		biomeTypes[0] = new BiomeSpawn();
 		biomeTypes[1] = new BiomeDesert();
 		biomeTypes[2] = new BiomeHills();
-		chance[0] = 5;
-		chance[1] = 14;
-		chance[2] = 1;
+		chance[0] = .01f;
+		chance[1] = .7f;
+		chance[2] = .1f;
+	}
+	void genBiomeOrder(){
+		for(int i=0;i<max;i++){			
+			for(int i2=0;i2<biomeTypes.length;i2++){
+				if(((float)random.nextFloat()) <= chance[i2]){
+					biomeorder.add(biomeTypes[i2]);
+				}
+			}
+		}
+	}
+	Biome chooseBiome(){
+		if(place >= (biomeorder.size()-1)){
+			place = -1;
+		}
+		place ++;
+		return biomeorder.get(place);
 	}
 	
 	@Override

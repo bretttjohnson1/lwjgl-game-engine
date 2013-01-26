@@ -5,10 +5,13 @@ import javax.vecmath.Vector3f;
 import survivalGame.Level;
 import survivalGame.VisibleObjectHandler;
 
+import engine.CollisionListener;
 import engine.Point3d;
+import engine.SpecialRigidBody;
+import engine.Utils;
 import engine.VisibleObject;
 
-public class Entity {
+public class Entity implements CollisionListener{
 	
 	Vector3f location;
 	VisibleObject rendarbleObject;
@@ -32,5 +35,15 @@ public class Entity {
 	
 	public void setLocation(Vector3f loc){
 		this.location = loc;
+	}
+	public void entityCollision(Object o,Point3d loc){
+		
+	}
+
+	@Override
+	public void collisionOccured(Object b, Object call, Vector3f loc) {
+		if(call instanceof Entity ){
+			((Entity)call).entityCollision(b, Utils.vector3fToPoint3d(loc));
+		}
 	}	
 }

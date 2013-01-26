@@ -27,7 +27,7 @@ public class Level {
 	boolean night = false;
 	BaseMenu menu = null;
 	Player player;
-	
+
 	public Level(World world){
 		renderWorld = world;
 		world.addLight(sun.light);	
@@ -35,7 +35,7 @@ public class Level {
 		sun.light.setAmbient(new Vector4f(1,1,1,1));
 		esm = new EntitySpawnManager(this);
 	}
-	
+
 	public void addEntity(Entity e){
 		entitys.add(e);
 		if(e instanceof EntityLight){
@@ -46,7 +46,7 @@ public class Level {
 		e.getVisableObject().setVisible(true);
 		//System.out.println("skldhjaslkdjsalkdjasolkdjs");
 	} 
-	
+
 	public void removeEntity(Entity e){
 		entitys.remove(e);
 		e.getVisableObject().removeFromPhysWorld();
@@ -56,13 +56,13 @@ public class Level {
 		}
 		renderWorld.removeObject(e.getVisableObject());
 	}
-	
+
 	public void addObject(Object o){
 		objects.add(o);
 		renderWorld.addObject(o.vObject);
 		o.vObject.setVisible(true);
 	}
-	
+
 	public void removeObject(Object o){
 		objects.remove(o);
 		renderWorld.removeObject(o.vObject);
@@ -74,7 +74,7 @@ public class Level {
 		}else{
 			renderWorld.setMenu(null);
 		}
-		
+
 	}
 	public void setPlayer(Player player){
 		this.player = player;
@@ -84,6 +84,7 @@ public class Level {
 	int elapsed = 0;
 	int currentTime = day/4;	
 	public void tick(){
+		esm.tick();
 		if(elapsed>=100){ 
 			elapsed = 0;
 			if(night && currentTime >= day/2){ 
@@ -94,29 +95,26 @@ public class Level {
 			time = (float) currentTime/((float)day/2f);
 		}
 		elapsed++;
-		
-		if(esm != null){
-			esm.tick();
-		}
-	//	System.out.println(time);
-	//	System.out.println(currentTime);
+
+		//	System.out.println(time);
+		//	System.out.println(currentTime);
 		if(night) currentTime += 1;
 		else      currentTime -= 1;
 		sun.setTime(time);
 		renderWorld.render.setClearColor(new Color3f(time/2, time/2, time));
-		for(int i=0;i<objects.size();i++){
-			objects.get(i).tick();
-		}
-		for(int i=0;i<entitys.size();i++){
-			entitys.get(i).tick();
-		}
-		
+		try{
+			for(int i=0;i<objects.size();i++){
+				objects.get(i).tick();
+			}
+			for(int i=0;i<entitys.size();i++){
+				entitys.get(i).tick();
+			}
+		}catch(Exception e){}
 	}
-	
+
 	public void menuTick(){
 		if(menu != null){
 			menu.tick();
 		}
 	}
-	
 }

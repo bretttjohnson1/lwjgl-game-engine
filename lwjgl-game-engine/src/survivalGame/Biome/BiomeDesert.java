@@ -20,7 +20,7 @@ public class BiomeDesert implements Biome{
 
 	@Override
 	public float getNoise(float a, float c) {
-		return 2f;
+		return 1.3f;
 	}
 
 	@Override

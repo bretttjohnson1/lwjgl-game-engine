@@ -11,6 +11,7 @@ public class ItemWeapon extends Item{
 	public ItemWeapon(Weapon w,int weight) {
 		super(w.image,w.weaponModel, weight);
 		weapon = w;
+		name = w.name;
 	}
 	public Weapon weapon;
 	
