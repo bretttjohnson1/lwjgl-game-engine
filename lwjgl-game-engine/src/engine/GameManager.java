@@ -37,14 +37,26 @@ public class GameManager implements Runnable {
 			cleanupAndEndGame();			
 		}
 		this.game = game;
-		this.game.initGameObjects();	
-		this.game.preInit();		
+		this.game.initGameObjects();
+		this.game.preInit();	
+		game.rendert.start();			
 		world = game.world;
-		game.rendert.start();
 		this.gameSpeed = (float) gameSpeed;
-		game.midInit();
 		while(!Keyboard.isCreated() || game.world.renderTickNumber < 3){
-	//		System.out.println("Wating on render...");
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		};	
+		game.midInit();
+		game.world.renderTickNumber = 0;
+		while(game.world.renderTickNumber < 7){
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		};		
 		game.postInit();
 		logic = new Thread(this,"Logic");

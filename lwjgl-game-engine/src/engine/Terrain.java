@@ -357,24 +357,42 @@ public class Terrain{
 		}
 		texPart.rewind();
 		normalPart = BufferUtils.createFloatBuffer(Chunk.length*Chunk.length*6*3);
-		
+		/*
 		for (int a=0;a<Chunk.length-1;a++){
 			for (int b=0;b<Chunk.length-1;b++){
 				Vector3f p1 =new Vector3f(a + startx,Chunk[a][b],b + starty);				
 				Vector3f p2 =new Vector3f(a + 1 + startx,Chunk[a+1][b],b + starty);
 				Vector3f p3 =new Vector3f(a + startx,Chunk[a][b+1],b + 1 + starty);
 				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
-				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
-				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2, p1, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3, p2, p1)));
 				//----------------------------------
 				p1 = new Vector3f(a + 1 + startx,Chunk[a+1][b+1],b + starty + 1);
 				p2 = new Vector3f(a + 1 + startx,Chunk[a+1][b],b + starty);
 				p3 = new Vector3f(a + startx,Chunk[a][b+1],b + starty + 1);
 				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
-				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
-				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1, p2, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2, p1, p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3, p2, p1)));
 			}
-		} 
+		}
+		
+		*/
+		
+		for(int i=0;i<points.length;i+=9){			
+			Vector3f p1 =new Vector3f(points[i],points[i+1],points[i+2]);				
+			Vector3f p2 =new Vector3f(points[i+3],points[i+4],points[i+5]);
+			Vector3f p3 =new Vector3f(points[i+6],points[i+7],points[i+8]);
+			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+		}
+		
 		/*
 		for(int i=0;i<points.length;i+=3){
 			if(i >= points.length-3){

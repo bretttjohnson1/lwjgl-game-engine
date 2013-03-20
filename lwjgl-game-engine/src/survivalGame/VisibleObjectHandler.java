@@ -1,5 +1,6 @@
 package survivalGame;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,22 +42,32 @@ public class VisibleObjectHandler {
 				return vo;
 			}
 		}
+		System.out.println("null");
 		return null;
 	}
 	public static void load(String path, World w, boolean animatedModels) throws FileNotFoundException, IOException, ClassNotFoundException{
 		File f = new File(path);
-		File[] files = f.listFiles();
+		File[] files = f.listFiles();		
 		if(files == null) return;
 		if(animatedModels){
-			for(int i=0;i<files.length;i++){				
-				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[i]));
-				AnimatedModel am = (AnimatedModel)ois.readObject();
+			for(int i=0;i<files.length;i++){
+				if(!files[i].isDirectory()) continue;
+				File[] temp = files[i].listFiles();
+				BufferedImage bi = null;
+				for(int i2=0;i2<temp.length;i2++){
+					System.out.println(temp[i2].getName());
+					if(temp[i2].getName().endsWith(".bmp")|| temp[i2].getName().endsWith(".gif"))
+						bi = ImageIO.read(temp[i2]);
+				}
+				if(bi == null){
+					System.out.println("WARINING AN ANIMATED MODEL HAD NO IMAGE!!");
+					continue;
+				}
+				AnimatedModel am = (new OBJLoader()).loadAnimatedModel(files[i].getAbsolutePath() + "/" + files[i].getName(), files[i].listFiles().length-1,bi );
 				am.name = files[i].getName();
 				vObjs.add(am);	
-				am.lodedFromFile();
 				am.setVisible(false);
 				w.addObject(am);
-				ois.close();
 			}
 		}else{
 			for(int i=0;i<files.length;i++){

@@ -53,6 +53,7 @@ public class OBJLoader {
 		Model m = new Model();
 		String line;				
 		while((line = reader.readLine()) != null){
+		try{	
 			if(line.startsWith("v ")){
 				double x = Double.parseDouble(line.split(" ")[1]);
 				double y = Double.parseDouble(line.split(" ")[2]);
@@ -81,6 +82,11 @@ public class OBJLoader {
 				double zn = Double.parseDouble(line.split(" ")[3].split("/")[2]);						
 				m.faces.add(new Face(new Point3d(xv, yv, zv), new Point3d(xt,yt,zt),new Point3d(xn, yn, zn)));			
 			}
+		}catch(Exception e){
+	//		System.err.println("Warning faild to read a line");
+		//	System.err.println();
+		//	e.printStackTrace();
+		}
 		}	
 		reader.close();	
 		m.image = image;	

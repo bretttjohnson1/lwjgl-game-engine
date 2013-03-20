@@ -383,9 +383,9 @@ public class TerrainManager implements VisibleObject{
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, texID);			
 		GL11.glTexCoordPointer(2, GL11.GL_FLOAT,0, 0L);
 
-	//	GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-	//	ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normID);			
-	//	GL11.glNormalPointer(GL11.GL_FLOAT, 0,0);			
+		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normID);			
+		GL11.glNormalPointer(GL11.GL_FLOAT, 0,0);			
 
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, defc*defc*6*renderAtATime);			
 

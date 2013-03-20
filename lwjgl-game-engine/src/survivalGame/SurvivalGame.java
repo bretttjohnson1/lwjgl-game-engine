@@ -11,7 +11,11 @@ import javax.vecmath.Vector3f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.DisplayMode;
 
+import survivalGame.entity.Entity;
 import survivalGame.entity.EntityItem;
+import survivalGame.entity.EntityMob;
+import survivalGame.entity.EntityMobPotato;
+import survivalGame.entity.EntityMobBlob;
 import survivalGame.entity.EntityPlayer;
 import survivalGame.item.ItemWeapon;
 import survivalGame.object.HouseObject;
@@ -45,6 +49,7 @@ public class SurvivalGame extends BasicGame {
 	Player player;
 	EntityPlayer entityPlayer;
 	Level level;	
+	Entity friend;
 	WeaponRange[] weapons = new WeaponRange[2];
 	Object test = null;
 	boolean fScreen = false;
@@ -76,6 +81,11 @@ public class SurvivalGame extends BasicGame {
 		entityPlayer = new EntityPlayer(null, level, player);
 		setGravity(new Vector3f(0,-98f,0));
 		gm.grabMouse = true;
+		
+	}
+	
+	@Override
+	public void midInit() {
 		try {
 			VisibleObjectHandler.load("SurvivalGame/Models",world,false);
 		} catch (ClassNotFoundException | IOException e) {
@@ -83,15 +93,12 @@ public class SurvivalGame extends BasicGame {
 			e.printStackTrace();
 		}
 		try {
-			VisibleObjectHandler.load("SurvivalGame/AnimatedModels",world,true);
+			VisibleObjectHandler.load("SurvivalGame/Animated Models",world,true);
 		} catch (ClassNotFoundException | IOException e) {
 			System.err.println("There was an error reading the Animated Model Files.");
 			e.printStackTrace();
 		}		
 	}
-	
-	@Override
-	public void midInit() {}
 	
 	
 	@Override
@@ -114,10 +121,15 @@ public class SurvivalGame extends BasicGame {
 		player.inventory.addItem(new InventoryItem(1, itemAK47));
 		player.inventory.addItem(new InventoryItem(1, itemPistol));
 		player.inventory.addItem(new InventoryItem(1, itemGun));
-		
-		player.setLocation(new Point3d(20,70,20));	
-		world.setMenu(null);		
-		
+		EntityMob test = new EntityMobPotato(level);
+		level.addEntity(test);
+		player.setLocation(new Point3d(20,70,20));
+		friend = new EntityMobBlob(level);
+		friend.setLocation(new Vector3f(0,40,0));
+		level.addEntity(friend);
+		world.setMenu(null);	
+	//	EntityMob test = new EntityMobPotato(level);
+		//level.addEntity(test);
 	}
 	boolean pressed = false;
 	boolean tPressed = false;

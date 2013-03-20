@@ -18,6 +18,7 @@ public class Entity implements CollisionListener{
 	Level level;
 	
 	public Entity(VisibleObject vo, Level level){
+	//	System.out.println(vo);
 		rendarbleObject = vo;
 		this.level = level;
 		location = new Vector3f();
@@ -35,6 +36,8 @@ public class Entity implements CollisionListener{
 	
 	public void setLocation(Vector3f loc){
 		this.location = loc;
+		if(rendarbleObject != null)
+		rendarbleObject.move(Utils.vector3fToPoint3d(loc));
 	}
 	public void entityCollision(Object o,Point3d loc){
 		
@@ -43,6 +46,8 @@ public class Entity implements CollisionListener{
 	@Override
 	public void collisionOccured(Object b, Object call, Vector3f loc) {
 		if(call instanceof Entity ){
+			//System.out.println("sdasdasdasdasdasdasdasdsdasdas");
+			//if(b instanceof SpecialRigidBody) System.out.println("Collisiodasjfgasdjfgn: "  + ", " + ((SpecialRigidBody) b ).name);
 			((Entity)call).entityCollision(b, Utils.vector3fToPoint3d(loc));
 		}
 	}	

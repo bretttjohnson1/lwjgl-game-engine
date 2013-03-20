@@ -43,11 +43,11 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 
 public class AnimatedModel implements VisibleObject{
-	
+
 	int currentFrame = 0;
 	transient DoubleBuffer vertexBuffer;
 	transient DoubleBuffer normalBuffer;
-	transient DoubleBuffer textureCoordBuffer;	
+	transient DoubleBuffer textureCoordBuffer;      
 	public Point3d location = new Point3d(0, 0, 0);
 	ArrayList<Point3d> tempVertBuff = new ArrayList<Point3d>();
 	ArrayList<Point3d> tempNormBuff = new ArrayList<Point3d>();
@@ -69,9 +69,9 @@ public class AnimatedModel implements VisibleObject{
 	int[] textureData;
 	transient boolean readyToWrite = false;
 	public String name = null;
-	
+
 	public AnimatedModel(){
-		
+
 	}
 	public void lodedFromFile(){
 		built = false;
@@ -79,7 +79,7 @@ public class AnimatedModel implements VisibleObject{
 		textureBuffer.put(textureData);
 		textureBuffer.rewind();
 	}
-	
+
 	public void imageToArray(){
 		width = texture.getWidth();
 		height = texture.getHeight();
@@ -89,7 +89,7 @@ public class AnimatedModel implements VisibleObject{
 		}
 		readyToWrite = true;
 	}
-	
+
 	public void addFrame(ArrayList<Point3d> verts, ArrayList<Point3d> norms, ArrayList<Point2d> texCoords, ArrayList<Face> faces){
 		totalFrames += 1;
 		frameStart.add(tempVertBuff.size());
@@ -97,11 +97,11 @@ public class AnimatedModel implements VisibleObject{
 			tempVertBuff.add(verts.get((int) f.vertex.x-1));
 			tempVertBuff.add(verts.get((int) f.vertex.y-1));
 			tempVertBuff.add(verts.get((int) f.vertex.z-1));
-			
+
 			tempNormBuff.add(norms.get((int) f.normal.x-1));
 			tempNormBuff.add(norms.get((int) f.normal.y-1));
 			tempNormBuff.add(norms.get((int) f.normal.z-1));
-			
+
 			tempCoordBuff.add(texCoords.get((int) f.texture.x-1));
 			tempCoordBuff.add(texCoords.get((int) f.texture.y-1));
 			tempCoordBuff.add(texCoords.get((int) f.texture.z-1));
@@ -110,12 +110,12 @@ public class AnimatedModel implements VisibleObject{
 		arrayNormSize.add(faces.size()*9);
 		arrayCoordSize.add(faces.size()*6);
 	}
-	
+
 	public void doneAddingFrames(){
 		int vS = 0;
 		int nS = 0;
 		int tS = 0;
-		
+
 		for(Integer i: arrayVertSize){
 			vS += i;
 		}
@@ -125,11 +125,11 @@ public class AnimatedModel implements VisibleObject{
 		for(Integer i: arrayCoordSize){
 			tS += i;
 		}
-		
+
 		vertexBuffer = BufferUtils.createDoubleBuffer(vS);
 		normalBuffer = BufferUtils.createDoubleBuffer(nS);
 		textureCoordBuffer = BufferUtils.createDoubleBuffer(tS);
-		
+
 		for(Point3d p: tempVertBuff){
 			vertexBuffer.put(p.asDoubleArray());
 		}
@@ -139,56 +139,56 @@ public class AnimatedModel implements VisibleObject{
 		for(Point2d p: tempCoordBuff){
 			textureCoordBuffer.put(p.asDoubleArray());
 		}
-		
+
 	}
-	
+
 	public void loadTexture(){
 		if(textureBuffer != null){
-			texID = GL11.glGenTextures();		
+			texID = GL11.glGenTextures();           
 			glBindTexture(GL_TEXTURE_2D, texID);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);		
-			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL11. GL_MODULATE);		
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);          
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL11. GL_MODULATE);               
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);		
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);          
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);					
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width,height,0,GL_RGB,GL_UNSIGNED_INT,textureBuffer);	
-			glBindTexture(GL_TEXTURE_2D, 0);	
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);                                     
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width,height,0,GL_RGB,GL_UNSIGNED_INT,textureBuffer);    
+			glBindTexture(GL_TEXTURE_2D, 0);        
 			return;
 		}
-		
+
 		int il = texture.getWidth()*texture.getHeight();
 		int[] pixles = new int[il];
 		PixelGrabber pg = new PixelGrabber(texture, 0, 0, texture.getWidth(), texture.getHeight(), pixles,0,texture.getWidth());
-		ColorModel cm = pg.getColorModel();		
+		ColorModel cm = pg.getColorModel();             
 		try {
 			pg.grabPixels();
-		} catch (InterruptedException e) {		
+		} catch (InterruptedException e) {              
 			e.printStackTrace();
 		}
 		textureBuffer = (ByteBuffer.allocateDirect(il*4*3)).asIntBuffer();
-		
+
 		for(int i=0;i<pixles.length;i++){
 			textureBuffer.put(cm.getRed(pixles[i]));
 			textureBuffer.put(cm.getGreen(pixles[i]));
-			textureBuffer.put(cm.getBlue(pixles[i]));			  
+			textureBuffer.put(cm.getBlue(pixles[i]));                         
 		}
 		textureBuffer.flip();
-		texID = GL11.glGenTextures();		
+		texID = GL11.glGenTextures();           
 		glBindTexture(GL_TEXTURE_2D, texID);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);		
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL11. GL_MODULATE);		
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);          
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL11. GL_MODULATE);               
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);		
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);          
 		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);					
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.getWidth(null),texture.getHeight(null),0,GL_RGB,GL_UNSIGNED_INT,textureBuffer);	
-		glBindTexture(GL_TEXTURE_2D, 0);		
+		glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);                                     
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.getWidth(null),texture.getHeight(null),0,GL_RGB,GL_UNSIGNED_INT,textureBuffer);  
+		glBindTexture(GL_TEXTURE_2D, 0);                
 	}
-	
+
 	public void stepAnimation(int steps){
 		if(currentFrame >= (totalFrames-1)){
-			currentFrame = 0;			
+			currentFrame = 0;                       
 			return;
 		}
 		currentFrame += steps;
@@ -196,96 +196,96 @@ public class AnimatedModel implements VisibleObject{
 	public void gotoFrame(int frame){
 		currentFrame = frame;
 	}
-	
+
 	int vertexBufferID = 0;
 	int normalBufferID = 0;
 	int textureCoordBufferID = 0;
-	
+
 	public boolean readyToWrite(){
 		return readyToWrite;
 	}
-	
-	
+
+
 	@Override
-	public void render() {			
+	public void render() {                  
 		if(built == false){
-			
+
 			if(vertexBufferID < 1) vertexBufferID = ARBVertexBufferObject.glGenBuffersARB();
 			if(normalBufferID < 1) normalBufferID = ARBVertexBufferObject.glGenBuffersARB();
 			if(textureCoordBufferID < 1) textureCoordBufferID = ARBVertexBufferObject.glGenBuffersARB();
-			
+
 			vertexBuffer.flip();
 			normalBuffer.flip();
 			textureCoordBuffer.flip();
 			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);
 			ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBuffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
-			
+
 			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBufferID);
 			ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBuffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
-			
+
 			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureCoordBufferID);
 			ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureCoordBuffer, ARBVertexBufferObject.GL_STATIC_DRAW_ARB);
-			
+
 			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);
 			built = true;
 			if(texture != null || textureBuffer != null) {
 				loadTexture();
-				
+
 			}
-			
+
 		}else{
 			if(texture != null || textureBuffer != null){
-				glBindTexture(GL_TEXTURE_2D, texID);		
-			
+				glBindTexture(GL_TEXTURE_2D, texID);            
+
 			}
-						
-			GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);			
-			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureCoordBufferID);		
+
+			GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);                  
+			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureCoordBufferID);         
 			GL11.glTexCoordPointer(2, GL11.GL_DOUBLE, 0,0);
-			
-			GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);			
-			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);		
-			GL11.glVertexPointer(3, GL11.GL_DOUBLE,0,0);			
-			
+
+			GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);                 
+			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);               
+			GL11.glVertexPointer(3, GL11.GL_DOUBLE,0,0);                    
+
 			GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
-			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBufferID);			
+			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBufferID);                       
 			GL11.glNormalPointer(GL11.GL_DOUBLE, 0,0);
-			
-			
-			
+
+
+
 			GL11.glPushMatrix();
-			
+
 			GL11.glTranslated(location.x, location.y, location.z);
 			GL11.glRotated(rot.x, 1, 0, 0);
 			GL11.glRotated(rot.y, 0, 1, 0);
 			GL11.glRotated(rot.z, 0, 0, 1);    
-			
-	//		GL11.glColor3f(1, 0, 0);
-		//	GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 10f);
+
+			//              GL11.glColor3f(1, 0, 0);
+			//      GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 10f);
 			GL11.glDrawArrays(GL11.GL_TRIANGLES, frameStart.get(currentFrame),arrayVertSize.get(currentFrame)/3); 
 			GL11.glPopMatrix();
-			
+
 			/*
-			GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-			GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-			GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-			*/
-			
-			ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);	
-			glBindTexture(GL_TEXTURE_2D, 0);
+                        GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+                        GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+                        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+			 */
+
+			 ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, 0);    
+			 glBindTexture(GL_TEXTURE_2D, 0);
 		}
-		
+
 	}
-	
+
 	@Override
 	public void cleanUp() {
 		GL11.glDeleteTextures(texID);
 		ARBVertexBufferObject.glDeleteBuffersARB(normalBufferID);
 		ARBVertexBufferObject.glDeleteBuffersARB(vertexBufferID);
 		ARBVertexBufferObject.glDeleteBuffersARB(textureCoordBufferID);
-	}	
-	
-	public AnimatedModel duplicate(){		
+	}       
+
+	public AnimatedModel duplicate(){               
 		AnimatedModel m = new AnimatedModel();
 		m.location = location.duplicate();
 		m.frameStart = frameStart;
@@ -304,7 +304,7 @@ public class AnimatedModel implements VisibleObject{
 		if(world != null){
 			world.addObject(m);
 		}
-				
+
 		return m;
 	}
 
@@ -344,7 +344,7 @@ public class AnimatedModel implements VisibleObject{
 		}else{
 			location = newLocation;
 		}
-		
+
 	}
 	public void addToPhysWorld(CollisionShape cs,float mass){
 		if(world == null){
@@ -360,26 +360,26 @@ public class AnimatedModel implements VisibleObject{
 			MotionState ms = new DefaultMotionState(t);
 			RigidBodyConstructionInfo rbci = new RigidBodyConstructionInfo(mass, ms, cs,i);
 			rb = new RigidBody(rbci);
-		}else{		
+		}else{          
 			MotionState ms = new DefaultMotionState(t);
 			RigidBodyConstructionInfo rbci = new RigidBodyConstructionInfo(mass, ms, cs);
 			rb = new RigidBody(rbci);
 		}
 		rigidBody = rb;
 		world.physWorld.addRigidBody(rb);
-		
+
 	}
 	@Override
 	public void addToPhysWorld() {
-		new RuntimeErrorException(new Error("Model must be supplyed with a Collision Box"));
+		new RuntimeErrorException(new Error("Animated Model must be supplyed with a Collision Box"));
 	}
 	@Override
 	public void addToPhysWorld(float mass) {
-		new RuntimeErrorException(new Error("Model must be supplyed with a Collision Box"));		
+		new RuntimeErrorException(new Error("Animated Model must be supplyed with a Collision Box"));            
 	}
 	@Override
 	public void removeFromPhysWorld() {
-		if(rigidBody != null){		
+		if(rigidBody != null){          
 			world.physWorld.removeRigidBody(rigidBody);
 		}
 	}
@@ -395,7 +395,7 @@ public class AnimatedModel implements VisibleObject{
 	public void removedFromWorld() {
 		if(rigidBody != null) world.physWorld.removeRigidBody(rigidBody);
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;

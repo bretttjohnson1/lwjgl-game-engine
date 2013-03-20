@@ -62,6 +62,27 @@ public class MobControler implements ActionListener {
 		rigidBody.setDamping(.7f, 0);		
 	}
 	
+	public MobControler(ConvexShape mobShape, World world, float mass, Object o, String name, CollisionListener cl){
+		collWorld = world.physWorld;
+		Transform t = new Transform();
+		t.setIdentity();
+		t.origin.set(0, 0, 0);
+		Vector3f inertia = new Vector3f();
+		mobShape.calculateLocalInertia(mass, inertia);
+		MotionState ms = new DefaultMotionState(t);
+		RigidBodyConstructionInfo rbci = new RigidBodyConstructionInfo(mass, ms, mobShape,inertia);
+		rigidBody = new SpecialRigidBody(rbci, o, name, cl);
+		rigidBody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);		
+		world.physWorld.addRigidBody(rigidBody);	
+		rigidBody.setSleepingThresholds(0, 0);
+		rigidBody.setAngularFactor(0);
+		rigidBody.setFriction(0);
+		rigidBody.setDamping(.7f, 0);		
+	}
+	public void setFriction(float friction){
+		rigidBody.setFriction(friction);
+	}
+	
 	public void jump(float force){
 		Vector3f vel = new Vector3f();		
 		getVelocity(vel);

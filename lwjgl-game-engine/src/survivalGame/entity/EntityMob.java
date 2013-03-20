@@ -9,16 +9,12 @@ import engine.AnimatedModel;
 import engine.AnimationPlayer;
 import engine.MobControler;
 import engine.Point3d;
+import engine.Utils;
 import engine.Vector3d;
 import engine.VisibleObject;
 
 public class EntityMob extends Entity {
 
-	public EntityMob(VisibleObject vo, Level level,MobAI mobAI) {
-		super(vo, level);
-		this.mobAI = mobAI;
-		createWalkingAnimation();
-	}
 	
 	MobControler controler;
 	MobAI mobAI;
@@ -28,6 +24,13 @@ public class EntityMob extends Entity {
 	AnimationPlayer ap;
 	int walkingAnimation = 0;
 	
+	
+	public EntityMob(VisibleObject vo, Level level,MobAI mobAI) {
+		super(vo, level);
+		this.mobAI = mobAI;
+		createWalkingAnimation();
+	}
+	
 	public float getHealth(){
 		return health;
 	}
@@ -36,9 +39,15 @@ public class EntityMob extends Entity {
 	}
 	@Override
 	public void tick() {
+	//	System.out.println(controler);
 		if(controler == null) return;
 		if(mobAI == null) return;
-		rendarbleObject.move(controler.getLocation());
+		Point3d p = controler.getLocation();
+		p.x*=-1;
+		p.y*=-1;
+		p.z*=-1;
+		location = p.asVector3f();
+		rendarbleObject.move(p);
 		rendarbleObject.rot(controler.getRot());
 		mobAI.tick();
 		walk();
@@ -61,6 +70,8 @@ public class EntityMob extends Entity {
 			ap.stopAnimation();
 		}
 	}
+	
+	
 	public void equip(Item item){
 		//TODO: Write general equip code
 	}
@@ -79,5 +90,15 @@ public class EntityMob extends Entity {
 			kill();
 		}
 	}
-	
+	@Override
+	public void setLocation(Vector3f loc) {
+		controler.warp(loc);
+	}
+	public void entityCollision(Object o, Point3d loc) {
+		if(controler!= null) {
+			Point3d p = controler.getLocation();
+			if(p.y > 20)
+				System.out.println("Impact Vel: " + p.asVector3f());
+		}
+	}
 }

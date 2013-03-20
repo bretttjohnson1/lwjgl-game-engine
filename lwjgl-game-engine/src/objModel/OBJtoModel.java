@@ -32,8 +32,8 @@ import engine.OBJLoader;
 import engine.Point3d;
 
 public class OBJtoModel extends BasicGame implements ActionListener{
-	
-	
+
+
 	static Canvas c = new Canvas();
 	public static void main(String[] args) {
 		new OBJtoModel();
@@ -47,39 +47,39 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 	//JTextField name = new JTextField("Enter Name Here");
 	Light light = new Light(0, 10, 0, 1);
 	JCheckBox checkBoxAnimatedModel = new JCheckBox("Animated Model");
-	
+
 	public OBJtoModel(){
 		super(640,480,c);		
 		window.setSize((int)(640*1.5f),480);
 		window.setLayout(null);
 		window.setVisible(true);
-	//	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.add(c);
 		c.setVisible(true);
 		c.setSize(640, 480);
 		gm.startGame(this, 20);
-		
+
 		openImage = new JButton("Open Image");
 		openImage.setLocation(670, 100);
 		openImage.setSize(200, 25);
 		openImage.setVisible(true);
 		openImage.addActionListener(this);
 		window.add(openImage);
-		
+
 		openOBJ = new JButton("Open OBJ");
 		openOBJ.setLocation(670, 150);
 		openOBJ.setSize(200, 25);
 		openOBJ.setVisible(true);
 		openOBJ.addActionListener(this);
 		window.add(openOBJ);
-		
+
 		save = new JButton("Save Model");
 		save.setLocation(670, 200);
 		save.setSize(200, 25);
 		save.setVisible(true);
 		save.addActionListener(this);
 		window.add(save);
-		
+
 		convert = new JButton("Convert");
 		convert.setLocation(670, 250);
 		convert.setSize(200, 25);
@@ -87,19 +87,19 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		convert.addActionListener(this);
 		convert.setEnabled(false);
 		window.add(convert);
-		
+
 		numFrames.setLocation(850, 20);
 		numFrames.setSize(30, 25);
 		window.add(numFrames);
-		
-	//	name.setLocation(800, 48);
-	//	name.setSize(120, 25);
-	//	window.add(name);
-		
+
+		//	name.setLocation(800, 48);
+		//	name.setSize(120, 25);
+		//	window.add(name);
+
 		checkBoxAnimatedModel.setLocation(670, 27);
 		checkBoxAnimatedModel.setSize(150, 20);
 		window.add(checkBoxAnimatedModel);
-		
+
 		window.repaint();
 	}
 	@Override
@@ -109,7 +109,7 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 		light.setDiffuse(new Vector4f(0.6f,0.6f,0.6f,1));
 		world.addLight(light);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton b = (JButton) e.getSource();		
@@ -118,42 +118,69 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 			jfc.showOpenDialog(window);
 			image = jfc.getSelectedFile();					
 		}
-		
+
 		if(b == openOBJ){
 			jfc.setVisible(true);
 			jfc.showOpenDialog(window);
 			obj = jfc.getSelectedFile();					
 		}
-		
+
 		if(b == save){
 			jfc.setVisible(true);
 			jfc.showSaveDialog(window);
 			out = jfc.getSelectedFile();					
 		}
-		
+
 		if(b == convert){
 			OBJLoader ol = new OBJLoader();
 			Model l = null;
 			AnimatedModel am = null;
 			try {			
-				
+
 				if(checkBoxAnimatedModel.getAccessibleContext().getAccessibleValue().getCurrentAccessibleValue().intValue() == 1){
 					String fileName = obj.getAbsolutePath().substring(0,obj.getAbsolutePath().length()-11);
-					am = ol.loadAnimatedModel(fileName, Integer.parseInt(numFrames.getText()));
+					am = ol.loadAnimatedModel(fileName, Integer.parseInt(numFrames.getText()),ImageIO.read(image));
 				}else{
 					l =	ol.loadOBJ(obj,ImageIO.read(image));
 				}
-				
+
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				System.err.println("ERROR: Model could not be loaded!");
 				System.err.println("Exiting...");
 				gm.cleanupAndEndGame();
 			}
-			
-			world.addObject(l);	
 			ObjectOutputStream oos = null;
-			while(!l.readyToWrite()){
+			if(am == null){
+				world.addObject(l);
+				while(!l.readyToWrite()){
+					System.out.println("Wating...");
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+				try {
+					oos = new ObjectOutputStream(new FileOutputStream(out));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				try {
+					oos.writeObject(l);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.err.println("ERROR: Model could not be saved!");
+					System.err.println("Exiting...");
+				}				
+				l.setVisible(true);
+				l.move(new Point3d(0,0,-5));
+				return;
+			}
+			world.addObject(am);
+			while(!am.readyToWrite()){
 				System.out.println("Wating...");
 				try {
 					Thread.sleep(100);
@@ -169,23 +196,17 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 				e1.printStackTrace();
 			}
 			try {
-				if(am != null){
-		//			am.name = name.getText();
-					oos.writeObject(am);
-				}else{
-			//		l.name = name.getText();
-					oos.writeObject(l);
-				}				
+				oos.writeObject(am);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				System.err.println("ERROR: Model could not be saved!");
 				System.err.println("Exiting...");
 			}				
-			l.setVisible(true);
-			l.move(new Point3d(0,0,-5));
+			am.setVisible(true);
+			am.move(new Point3d(0,0,-5));
 		}
-		
-		
+
+
 		if(image != null && obj != null && out != null){
 			convert.setEnabled(true);
 		}else{
@@ -196,7 +217,7 @@ public class OBJtoModel extends BasicGame implements ActionListener{
 	double speed = 0.5;
 	@Override
 	public void tick() {
-		
+
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
 			camera.x -= Math.sin(camera.roty*factor)*speed;
 			camera.y += Math.sin(camera.rotx*factor)*speed;

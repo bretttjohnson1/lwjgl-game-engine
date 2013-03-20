@@ -26,7 +26,7 @@ public class Level {
 	float time = 1;
 	boolean night = false;
 	BaseMenu menu = null;
-	Player player;
+	public Player player;
 
 	public Level(World world){
 		renderWorld = world;
