@@ -14,7 +14,7 @@ public class EntityMobBlob extends EntityMob{
 		super(VisibleObjectHandler.getVisableObject("Blob"), level,new MobAIBlob());
 		controler = new MobControler(new SphereShape(4), level.renderWorld, 1f,this,"FRIEND",this);
 	//	controler.setGravity(new Vector3f(0,10,0));
-		mobAI.setControler(controler, level);
+		mobAI.setControler(controler, level, 50);
 		controler.setFriction(3);
 	}	
 }

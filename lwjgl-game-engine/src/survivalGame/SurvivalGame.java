@@ -126,7 +126,7 @@ public class SurvivalGame extends BasicGame {
 		player.setLocation(new Point3d(20,70,20));
 		friend = new EntityMobBlob(level);
 		friend.setLocation(new Vector3f(0,40,0));
-		level.addEntity(friend);
+	//	level.addEntity(friend);
 		world.setMenu(null);	
 	//	EntityMob test = new EntityMobPotato(level);
 		//level.addEntity(test);

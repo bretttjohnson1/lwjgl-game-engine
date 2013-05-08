@@ -140,29 +140,29 @@ public class Terrain{
 		this.right=right;
 		this.bottom=bottom;
 
-	//	for(int a=0;a<defp;a++){
-	//		this.top[a]=top[a];
-	//		this.left[a]=left[a];
-	//		this.right[a]=right[a];
-	//		this.bottom[a]=bottom[a];
-	//	}
+		//	for(int a=0;a<defp;a++){
+		//		this.top[a]=top[a];
+		//		this.left[a]=left[a];
+		//		this.right[a]=right[a];
+		//		this.bottom[a]=bottom[a];
+		//	}
 		multiplechunks=mult;
 	}
-	
+
 	public float[][] genTerrain(int def,BufferedImage image,float mag,Random random,Biome biome){
 		this.image = image;
 		Chunk = new float[def][def];
 		defp= def;
 		biome.setRandom(random);
 		biome.setMag(mag);
-		
+
 		int histp = 0;
 		//int rem = a;
 		double height = 2;
 		//determines flatness of terrain
 		double spacing =0;
-	//	float maxHeight = biome.getMaxHeight();
-	//	float minHeight = biome.getMinHeight();
+		//	float maxHeight = biome.getMaxHeight();
+		//	float minHeight = biome.getMinHeight();
 		for(int a=0;a<Chunk.length;a++){
 			for (int b=0;b<Chunk.length;b++){
 				Chunk[a][b]=0;	
@@ -177,23 +177,23 @@ public class Terrain{
 			for(int a=0;a<Chunk.length;a++){
 				if(top[a]!=0)
 					Chunk[0][a]=top[a];
-		//		else
-		//			Chunk[0][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
-			
+				//		else
+				//			Chunk[0][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
+
 				if(bottom[a]!=0)
 					Chunk[defp-1][a]=bottom[a];
-			//	else
-			//		Chunk[defp-1][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
-				
+				//	else
+				//		Chunk[defp-1][a] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
+
 				if(left[a]!=0)
 					Chunk[a][0]=left[a];
-			//	else
-			//		Chunk[a][0] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
+				//	else
+				//		Chunk[a][0] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
 
 				if(right[a]!=0)
 					Chunk[a][defp-1]=right[a];
-			//	else
-			//		Chunk[a][defp-1] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
+				//	else
+				//		Chunk[a][defp-1] = (random.nextFloat()*(maxHeight-minHeight))+minHeight;
 			}
 		}
 
@@ -255,14 +255,14 @@ public class Terrain{
 			nleft[a]=Chunk[a][0];
 
 			nright[a]=Chunk[a][def-1];
-			
-		//	ntop[a]=Chunk[0][(def-1) - a];
 
-//			nbottom[a]=Chunk[def-1][(def-1) - a];
+			//	ntop[a]=Chunk[0][(def-1) - a];
 
-	//		nleft[a]=Chunk[(def-1) - a][0];
+			//			nbottom[a]=Chunk[def-1][(def-1) - a];
 
-		//	nright[a]=Chunk[(def-1) - a][def-1];
+			//		nleft[a]=Chunk[(def-1) - a][0];
+
+			//	nright[a]=Chunk[(def-1) - a][def-1];
 		}
 
 		points=new float[def*def*2*3*3];                          
@@ -275,11 +275,11 @@ public class Terrain{
 				indes.putInt(i3);
 				indes.putInt(i3+1);
 				indes.putInt(i3+2);
-				
+
 				indes.putInt(i3+3);
 				indes.putInt(i3+4);
 				indes.putInt(i3+5);
-				
+
 				points[i2] = a + startx;   
 				points[i2+1]=Chunk[a][b];				
 				points[i2+2] = b + starty;				
@@ -303,27 +303,27 @@ public class Terrain{
 				points[i2+15] = a + startx;
 				points[i2+16]=Chunk[a][b + 1];				
 				points[i2+17] = b +  1 + starty;
-				
+
 				i2+=18;
 				i3+=6;
 			}
 		}
-	//System.out.println(i3);
-	//	ObjectArrayList<Vector3f> tris = new ObjectArrayList<Vector3f>(points.length/3);
-		
+		//System.out.println(i3);
+		//	ObjectArrayList<Vector3f> tris = new ObjectArrayList<Vector3f>(points.length/3);
+
 		for(int a=0;a<points.length;a+=1){
-	//		System.out.println(points[a]);	
+			//		System.out.println(points[a]);	
 			verts.putFloat(points[a]);
 			points[a] *= mag;	
-			
+
 		} 
-		
-	///	for(int i=0;i<verts.capacity();i+=4){
-	///	//	System.out.println(verts.getFloat(i));
+
+		///	for(int i=0;i<verts.capacity();i+=4){
+		///	//	System.out.println(verts.getFloat(i));
 		//	verts.putFloat(i, verts.getFloat(i)*mag);
 		//	
-	//	}
-		
+		//	}
+
 		int startz = starty;
 		vertPart = BufferUtils.createFloatBuffer(points.length);
 		vertPart.put(points);
@@ -336,17 +336,17 @@ public class Terrain{
 			for (int g=0;g<Chunk.length-1;g++){
 				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
 				texPart.put((startz*mag+g*mag/defp2)*test);
-				
+
 				texPart.put((startx*mag+(f*mag)/defp2)*test);
 				texPart.put((startz*mag+(g*mag)/defp2)*test);	
 
 				texPart.put((startx*mag+f*mag/defp2)*test);
 				texPart.put((startz*mag+(g+1)*mag/defp2)*test);
 
-				
+
 				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
 				texPart.put((startz*mag+g*mag/defp2)*test);
-				
+
 				texPart.put((startx*mag+(f+1)*mag/defp2)*test);
 				texPart.put((startz*mag+((g+1)*mag)/defp2)*test);
 
@@ -375,24 +375,34 @@ public class Terrain{
 				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3, p2, p1)));
 			}
 		}
-		
-		*/
-		
-		for(int i=0;i<points.length;i+=9){			
-			Vector3f p1 =new Vector3f(points[i],points[i+1],points[i+2]);				
-			Vector3f p2 =new Vector3f(points[i+3],points[i+4],points[i+5]);
-			Vector3f p3 =new Vector3f(points[i+6],points[i+7],points[i+8]);
-			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
-			//normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+
+		 */
+
+		for(int i=0;i<points.length;i+=9){	
+			if((i & 1) == 1) {
+				Vector3f p1 =new Vector3f(points[i],points[i+1],points[i+2]);				
+				Vector3f p2 =new Vector3f(points[i+3],points[i+4],points[i+5]);
+				Vector3f p3 =new Vector3f(points[i+6],points[i+7],points[i+8]);
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p1,p2,p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2,p3,p1)));
+			}else{
+				Vector3f p1 =new Vector3f(points[i],points[i+1],points[i+2]);				
+				Vector3f p2 =new Vector3f(points[i+3],points[i+4],points[i+5]);
+				Vector3f p3 =new Vector3f(points[i+6],points[i+7],points[i+8]);
+				normalPart.put(Utils.asFloatBuffer(calcTriNormO(p1,p2,p3)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNormO(p3,p1,p2)));
+				normalPart.put(Utils.asFloatBuffer(calcTriNormO(p2,p3,p1)));
+			}
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2,p3,p1)));
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2,p3,p1)));
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p2,p3,p1)));
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
+			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
 		}
-		
+		System.out.println("Done_________________________________________________");
+
 		/*
 		for(int i=0;i<points.length;i+=3){
 			if(i >= points.length-3){
@@ -404,73 +414,85 @@ public class Terrain{
 				normal.z = (current.x*next.y) - (current.y*current.x);
 				normalPart.put(Utils.asFloatBuffer(normal));				
 			}else{
-			
+
 		}
-			*/
+		 */
 		// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
 		normalPart.rewind();
-	
+
 		TriangleIndexVertexArray tiva = new TriangleIndexVertexArray(points.length/9, indes, 3*4, points.length/3, verts, 4*3);
 		tiva.setScaling(new Vector3f(mag,mag,mag));
 		TriangleMeshShape tms = new BvhTriangleMeshShape(tiva, true);
-		
-		
-		
+
+
+
 		collisionShape = tms;
 		return Chunk;
 	}
-	Vector3f calcTriNorm(Vector3f p1, Vector3f p2, Vector3f p3){		
-		p2.sub(p1);
-		p3.sub(p1);
-		Vector3f U = p2;
-		Vector3f V = p3;
+	Vector3f calcTriNorm(Vector3f p1, Vector3f p2, Vector3f p3){	
+		Vector3f U = new Vector3f(p2);
+		Vector3f V = new Vector3f(p3);
+		U.sub(p1);
+		V.sub(p1);
 		Vector3f normal = new Vector3f();
-	//	normal.x = (U.y*V.z) - (U.z*U.y);
-	//	normal.y = (U.z*V.x) - (U.x*U.z);
-	//	normal.z = (U.x*V.y) - (U.y*U.x);
+		//	normal.x = (U.y*V.z) - (U.z*U.y);
+		//	normal.y = (U.z*V.x) - (U.x*U.z);
+		//	normal.z = (U.x*V.y) - (U.y*U.x);
+		normal.cross(U, V);
+		return normal;		
+	}
+	Vector3f calcTriNormO(Vector3f p1, Vector3f p2, Vector3f p3){	
+		Vector3f U = new Vector3f(p2);
+		Vector3f V = new Vector3f(p3);
+		U.sub(p1);
+		V.sub(p1);
+		Vector3f normal = new Vector3f();
+		//	normal.x = (U.y*V.z) - (U.z*U.y);
+		//	normal.y = (U.z*V.x) - (U.x*U.z);
+		//	normal.z = (U.x*V.y) - (U.y*U.x);
 		normal.cross(V, U);
 		return normal;		
 	}
-	
+
 	public float[][] smooth(float[][] Chunk){
-		  for(int a=1;a<Chunk.length-1;a++){
-		   for(int b=1;b<Chunk.length-1;b++){
-		    float avg = Chunk[a][b];
-		    if(a>0){
-		     if(a<Chunk.length-1){
-		      if(b>0){
-		       if(b<Chunk.length-1){
-		        avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/4;
-		       }
-		       else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1])/3;
-		      }
-		      else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b+1])/3;
-		     }
-		     else if(b>0){
-		      if(b<Chunk.length-1){
-		       avg = (Chunk[a-1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
-		      }
-		      else avg = (Chunk[a-1][b]+Chunk[a][b-1])/2;
-		     }
-		     else avg = (Chunk[a][b+1]+Chunk[a-1][b])/3;
-		     
-		    }
-		    else if(b>0){
-		     if(b<Chunk.length-1){
-		      avg = (Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
-		     }
-		     else avg = (Chunk[a+1][b]+Chunk[a][b-1])/2;
-		    }
-		    else avg = (Chunk[a+1][b]+Chunk[a][b+1])/3;
-		    
-		    float dif = avg-Chunk[a][b];
-		    Chunk[a][b]+=dif;
-		   } 
-		  }
-		  
-		  return Chunk;
-		 }
-	
+		for(int a=1;a<Chunk.length-1;a++){
+			for(int b=1;b<Chunk.length-1;b++){
+				float avg = Chunk[a][b];
+				if(a>0){
+					if(a<Chunk.length-1){
+						if(b>0){
+							if(b<Chunk.length-1){
+								avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/4;
+							}
+							else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b-1])/3;
+						}
+						else avg = (Chunk[a-1][b]+Chunk[a+1][b]+Chunk[a][b+1])/3;
+					}
+					else if(b>0){
+						if(b<Chunk.length-1){
+							avg = (Chunk[a-1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
+						}
+						else avg = (Chunk[a-1][b]+Chunk[a][b-1])/2;
+					}
+					else avg = (Chunk[a][b+1]+Chunk[a-1][b])/3;
+
+				}
+				else if(b>0){
+					if(b<Chunk.length-1){
+						avg = (Chunk[a+1][b]+Chunk[a][b-1]+Chunk[a][b+1])/3;
+					}
+					else avg = (Chunk[a+1][b]+Chunk[a][b-1])/2;
+				}
+				else avg = (Chunk[a+1][b]+Chunk[a][b+1])/3;
+
+				float dif = avg-Chunk[a][b];
+				Chunk[a][b]+=dif;
+			} 
+		}
+
+		return Chunk;
+	}
+
 
 	public CollisionShape getCollisionShape(){
 		return collisionShape;

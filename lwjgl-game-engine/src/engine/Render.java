@@ -70,7 +70,7 @@ public class Render implements Runnable{
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_ALPHA_TEST);
 			glEnable(GL_BLEND);
-			glEnable(GL_NORMALIZE);
+		//	glEnable(GL_NORMALIZE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_LIGHTING);
 			//	glEnable(GL_STENCIL);

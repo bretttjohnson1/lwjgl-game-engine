@@ -80,7 +80,7 @@ public class Level {
 		this.player = player;
 	}
 	final int day = 144000; //ticks  
-	final int second = 100; //ticks
+	final int second = 100; //ticks this line might not do anything MABEY
 	int elapsed = 0;
 	int currentTime = day/4;	
 	public void tick(){
