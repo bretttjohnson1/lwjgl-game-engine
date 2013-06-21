@@ -45,7 +45,7 @@ public class ObjectTerrain extends Object{
 	public void tick(){
 		if(!inited){
 			manager.addToPhysWorld();
-			manager.Initgen(6, imageA, imageB, .6f,biome);
+			manager.Initgen(6, imageA, imageB,biome,100);
 			locA = player.getLocation();
 			inited = true;
 		}
@@ -60,9 +60,9 @@ public class ObjectTerrain extends Object{
 		biomeTypes[0] = new BiomeSpawn();
 		biomeTypes[1] = new BiomeDesert();
 		biomeTypes[2] = new BiomeHills();
-		chance[0] = .01f;
-		chance[1] = .7f;
-		chance[2] = .1f;
+		chance[0] = .0f;
+		chance[1] = 1.f;
+		chance[2] = 0.0f;
 	}
 	void genBiomeOrder(){
 		for(int i=0;i<max;i++){			

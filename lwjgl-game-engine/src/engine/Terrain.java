@@ -155,7 +155,7 @@ public class Terrain{
 		defp= def;
 		biome.setRandom(random);
 		biome.setMag(mag);
-
+		
 		int histp = 0;
 		//int rem = a;
 		double height = 2;
@@ -401,7 +401,7 @@ public class Terrain{
 			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
 			//	normalPart.put(Utils.asFloatBuffer(calcTriNorm(p3,p1,p2)));
 		}
-		System.out.println("Done_________________________________________________");
+		
 
 		/*
 		for(int i=0;i<points.length;i+=3){

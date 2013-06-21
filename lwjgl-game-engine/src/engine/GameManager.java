@@ -33,7 +33,7 @@ public class GameManager implements Runnable {
 			AL.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			System.err.println("ERROR: Could not creat AL audio device.");
+			System.err.println("FATAL ERROR: Could not creat AL audio device.");
 			cleanupAndEndGame();			
 		}
 		this.game = game;
@@ -153,7 +153,6 @@ public class GameManager implements Runnable {
 		BasicGame.isRunning = false;
 		world.cleanUp();	
 		AL.destroy();
-		System.out.println("Ending game...");
-		
+		System.out.println("Ending game...");		
 	}
 }

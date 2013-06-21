@@ -35,7 +35,8 @@ public class Entity implements CollisionListener{
 	}
 	
 	public void setLocation(Vector3f loc){
-		this.location = loc;
+		location = loc;
+		//System.out.println(location);
 		if(rendarbleObject != null)
 		rendarbleObject.move(Utils.vector3fToPoint3d(loc));
 	}

@@ -25,7 +25,7 @@ public class ColladaTest extends BasicGame {
 	 * @throws ParserConfigurationException 
 	 */
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-		ColladaLoader.loadModel(new File("C:/Users/Carl/Desktop/cube.dae"), null);
+		ColladaLoader.loadModel(new File("SurvivalGame/models/cube.dae"), null);
 	}
 
 }

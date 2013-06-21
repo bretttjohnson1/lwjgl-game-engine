@@ -5,6 +5,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.Sys;
 
+import survivalGame.EffectBullet;
 import survivalGame.Level;
 import survivalGame.VisibleObjectHandler;
 import survivalGame.entity.EntityProjectile;
@@ -45,7 +46,8 @@ public class WeaponRange extends Weapon{
 		ap.playAnimation(animationID, 100,false);	
 		//dir.scale(3000);
 	
-		projectile.spawn(dir, location, rot);
+		projectile.spawn(dir, location, rot);		
+		
 	//	CollisionObject co = level.renderWorld.rayTest(location, dir);	
 	}
 	

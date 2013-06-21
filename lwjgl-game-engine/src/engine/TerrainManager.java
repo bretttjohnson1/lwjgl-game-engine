@@ -219,7 +219,7 @@ public class TerrainManager implements VisibleObject{
 							}
 						}
 					}
-					
+
 					if(!exist[0][0]){
 						//System.out.println(newCount);
 						newCount++;
@@ -309,11 +309,11 @@ public class TerrainManager implements VisibleObject{
 		}
 	}
 
-	public void Initgen(int def,File imageA, File imageB,float noise,Biome startBiome){
+	public void Initgen(int def,File imageA, File imageB,Biome startBiome,float sizeFactor){
 
 		this.def = def;
 		defc = (int) (Math.pow(2, def)+1);
-		this.noise=noise;
+		//	this.noise=noise;
 		test=new float[defc];
 		for(int a=0;a<defc;a++)test[a]=(float)Math.random()*5;
 
@@ -328,9 +328,9 @@ public class TerrainManager implements VisibleObject{
 			e.printStackTrace();
 		}	
 
-		final float sizefactor=100;//size magnitude of terrain	
+		
 		float a = (float) (1/(defc));
-		mag = (sizefactor/(defc-1f));
+		mag = (sizeFactor/(defc-1f));
 
 		System.out.println("mag"+mag);
 		int numofchunks=1;
@@ -365,7 +365,7 @@ public class TerrainManager implements VisibleObject{
 		System.out.println("people");
 	}
 	public void render(){
-	//	GL11.glDisable(GL11.GL_LIGHTING);
+		//	GL11.glDisable(GL11.GL_LIGHTING);
 		if(!vboUpdated){ 
 			buildVBO();
 			vboUpdated = true;

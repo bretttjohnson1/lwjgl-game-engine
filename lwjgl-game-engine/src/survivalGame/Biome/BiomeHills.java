@@ -43,7 +43,7 @@ public class BiomeHills implements Biome {
 
 	@Override
 	public int getSmoothTimes() {
-		return 3;
+		return 4;
 	}
 
 }

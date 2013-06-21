@@ -13,6 +13,7 @@ import survivalGame.entity.EntitySpawnManager;
 import survivalGame.object.Object;
 
 import engine.Color3f;
+import engine.Effect;
 import engine.World;
 import engine.menu.Menu;
 
@@ -46,6 +47,10 @@ public class Level {
 		e.getVisableObject().setVisible(true);
 		//System.out.println("skldhjaslkdjsalkdjasolkdjs");
 	} 
+	
+	public void addEffect(Effect e){
+		renderWorld.addObject(e);
+	}
 
 	public void removeEntity(Entity e){
 		entitys.remove(e);

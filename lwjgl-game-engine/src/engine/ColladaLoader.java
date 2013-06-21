@@ -1,7 +1,9 @@
 package engine;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import javax.smartcardio.ATR;
@@ -27,28 +29,37 @@ public class ColladaLoader {
 	
 	public static Model loadModel(File model,File texture) throws ParserConfigurationException, SAXException, IOException {
 		
-	
-		
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document domTree = db.parse(model);
 		Node rootNode  = domTree.getDocumentElement();
 		
-		 
         NodeList childNodes = rootNode.getChildNodes();
- 
-        
-        printNodes(childNodes);
+        FileOutputStream fos = new FileOutputStream(new File("d:/out.tree"));
+        printNodes(childNodes,fos,0);
+        fos.close();
  
 		//TODO: this will convert the node data to a model
 		return null;
 	}
 	
-	public static void printNodes(NodeList list){
+	public static void printNodes(NodeList list,OutputStream os,int depth) throws IOException{
 		for(int i=0;i<list.getLength();i++){
-			System.out.println("Node Name: " + list.item(i).getNodeName());
-			System.out.println("\tValue: " + list.item(i).getNodeValue());
-			printNodes(list.item(i).getChildNodes());
+			String tab = "";
+			for(int i2=0;i2<depth;i2++)
+				tab += "\t";
+			os.write((new String(tab + "Node Name: " + list.item(i).getNodeName() + "\n").getBytes()));
+			os.write((new String(tab + "\tValue: " + list.item(i).getNodeValue() + "\n").getBytes()));
+			printNodes(list.item(i).getChildNodes(),os,depth + 1);
 		}
+	}
+	
+	static Node getNode(NodeList list, String name){
+		for(int i=0;i<list.getLength();i++){
+			if(list.item(i).getNodeName().equals(name)){
+				return list.item(i);
+			}
+		}
+		return null;
 	}
 }	
 	
